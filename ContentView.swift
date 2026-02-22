@@ -71,11 +71,17 @@ struct ContentView: View {
                 VStack(spacing: 20) {
                     // Educational Prompt
                     HStack(alignment: .top, spacing: 16) {
-                        Image(systemName: iconForTemp)
-                            .font(.system(size: 32))
-                            .foregroundColor(colorForTemp)
-                            .symbolEffect(.bounce, value: envState.temperature)
-                            .frame(width: 40)
+                        Group {
+                            if #available(iOS 17.0, *) {
+                                Image(systemName: iconForTemp)
+                                    .symbolEffect(.bounce, value: envState.temperature)
+                            } else {
+                                Image(systemName: iconForTemp)
+                            }
+                        }
+                        .font(.system(size: 32))
+                        .foregroundColor(colorForTemp)
+                        .frame(width: 40)
                         
                         Text(message)
                             .font(.system(size: 16, weight: .medium, design: .default))
