@@ -1,5 +1,4 @@
 import SpriteKit
-import UIKit
 
 class SimulationScene: SKScene {
     weak var motionManager: MotionManager?
@@ -17,42 +16,80 @@ class SimulationScene: SKScene {
     private var lastTemp: Double = 1.0
     private var meltTimer: TimeInterval = 0
     private var spawnBatchSize: Int = 1
+    private var lastUpdateTime: TimeInterval?
+    private var hasInitializedScene = false
+    private var cleanupTimer: TimeInterval = 0
+    
+    private let cleanupInterval: TimeInterval = 0.25
+    private let cleanupMargin: CGFloat = 250
     
     override func didMove(to view: SKView) {
         self.backgroundColor = .clear // Let SwiftUI's gradient show through
+        configureBoundsPhysics()
+        
+        if !hasInitializedScene {
+            setupEnvironment()
+            spawnInitialWater()
+            hasInitializedScene = true
+        }
+        
+        layoutEnvironment()
+    }
+    
+    override func didChangeSize(_ oldSize: CGSize) {
+        super.didChangeSize(oldSize)
+        configureBoundsPhysics()
+        layoutEnvironment()
+    }
+    
+    private func configureBoundsPhysics() {
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsBody?.friction = 0.5
         self.physicsBody?.restitution = 0.1
-        
-        setupEnvironment()
-        spawnInitialWater()
     }
     
     func setupEnvironment() {
         // Village Platform (Left side)
-        villagePlatform.fillColor = UIColor(red: 0.15, green: 0.18, blue: 0.22, alpha: 1.0)
-        villagePlatform.strokeColor = UIColor.white.withAlphaComponent(0.2)
-        villagePlatform.position = CGPoint(x: self.frame.minX + 140, y: self.frame.minY + 200)
-        villagePlatform.physicsBody = SKPhysicsBody(polygonFrom: villagePlatform.path!)
-        villagePlatform.physicsBody?.isDynamic = false
-        addChild(villagePlatform)
+        villagePlatform.fillColor = SKColor(red: 0.15, green: 0.18, blue: 0.22, alpha: 1.0)
+        villagePlatform.strokeColor = SKColor.white.withAlphaComponent(0.2)
+        if let platformPath = villagePlatform.path {
+            villagePlatform.physicsBody = SKPhysicsBody(polygonFrom: platformPath)
+            villagePlatform.physicsBody?.isDynamic = false
+        }
+        if villagePlatform.parent == nil {
+            addChild(villagePlatform)
+        }
         
         // Village House
-        villageHouse.fillColor = UIColor.systemTeal.withAlphaComponent(0.8)
+        villageHouse.fillColor = SKColor(red: 0.18, green: 0.7, blue: 0.72, alpha: 0.8)
         villageHouse.strokeColor = .clear
-        villageHouse.position = CGPoint(x: villagePlatform.position.x, y: villagePlatform.position.y + 40)
-        villageHouse.physicsBody = SKPhysicsBody(polygonFrom: villageHouse.path!)
-        villageHouse.physicsBody?.isDynamic = false
-        addChild(villageHouse)
+        if let housePath = villageHouse.path {
+            villageHouse.physicsBody = SKPhysicsBody(polygonFrom: housePath)
+            villageHouse.physicsBody?.isDynamic = false
+        }
+        if villageHouse.parent == nil {
+            addChild(villageHouse)
+        }
         
         // Ice Shelf (Top Right)
-        iceNode.fillColor = UIColor.white.withAlphaComponent(0.9)
-        iceNode.strokeColor = UIColor.cyan.withAlphaComponent(0.5)
+        iceNode.fillColor = SKColor.white.withAlphaComponent(0.9)
+        iceNode.strokeColor = SKColor.cyan.withAlphaComponent(0.5)
         iceNode.lineWidth = 2
+        if let icePath = iceNode.path {
+            iceNode.physicsBody = SKPhysicsBody(polygonFrom: icePath)
+            iceNode.physicsBody?.isDynamic = false
+        }
+        if iceNode.parent == nil {
+            addChild(iceNode)
+        }
+        
+        layoutEnvironment()
+    }
+    
+    private func layoutEnvironment() {
+        villagePlatform.position = CGPoint(x: self.frame.minX + 140, y: self.frame.minY + 200)
+        villageHouse.position = CGPoint(x: villagePlatform.position.x, y: villagePlatform.position.y + 40)
         iceNode.position = CGPoint(x: self.frame.maxX - 160, y: self.frame.maxY - 150)
-        iceNode.physicsBody = SKPhysicsBody(polygonFrom: iceNode.path!)
-        iceNode.physicsBody?.isDynamic = false
-        addChild(iceNode)
     }
     
     func spawnInitialWater() {
@@ -70,8 +107,8 @@ class SimulationScene: SKScene {
         // Apple-style glowing aesthetic
         let radius: CGFloat = CGFloat.random(in: 5...8)
         let drop = SKShapeNode(circleOfRadius: radius)
-        drop.fillColor = UIColor.cyan.withAlphaComponent(0.7)
-        drop.strokeColor = UIColor.white.withAlphaComponent(0.3)
+        drop.fillColor = SKColor.cyan.withAlphaComponent(0.7)
+        drop.strokeColor = SKColor.white.withAlphaComponent(0.3)
         drop.blendMode = .add // Creates a luminous, glowing fluid effect when particles overlap
         drop.position = position
         
@@ -88,6 +125,8 @@ class SimulationScene: SKScene {
     }
     
     override func update(_ currentTime: TimeInterval) {
+        let deltaTime = frameDeltaTime(for: currentTime)
+        
         // 1. Butter-smooth Gravity vector mapping via CoreMotion
         if let pitch = motionManager?.pitch, let roll = motionManager?.roll {
             // Apply easing to prevent sudden accelerometer spikes
@@ -110,7 +149,7 @@ class SimulationScene: SKScene {
             
             // Dynamic Melting Formula
             if env.temperature > 1.5 {
-                meltTimer += 0.016 // Approximates 60fps
+                meltTimer += deltaTime
                 
                 // Exponential melting speed based on temp severity
                 let severity = (env.temperature - 1.0) / 4.0 // 0.0 to 1.0
@@ -130,6 +169,39 @@ class SimulationScene: SKScene {
                 }
             }
         }
+        
+        cleanupTimer += deltaTime
+        if cleanupTimer >= cleanupInterval {
+            cleanupTimer = 0
+            pruneWaterDropsOutsideBounds()
+        }
+    }
+    
+    private func frameDeltaTime(for currentTime: TimeInterval) -> TimeInterval {
+        defer { lastUpdateTime = currentTime }
+        
+        guard let lastUpdateTime else {
+            return 1.0 / 60.0
+        }
+        
+        // Avoid giant simulation jumps when the scene resumes after a pause.
+        return min(max(0, currentTime - lastUpdateTime), 0.1)
+    }
+    
+    private func pruneWaterDropsOutsideBounds() {
+        let minX = self.frame.minX - cleanupMargin
+        let maxX = self.frame.maxX + cleanupMargin
+        let minY = self.frame.minY - cleanupMargin
+        
+        let dropsToRemove = waterDrops.filter { drop in
+            guard drop.parent != nil else { return true }
+            return drop.position.x < minX || drop.position.x > maxX || drop.position.y < minY
+        }
+        
+        for drop in dropsToRemove {
+            drop.removeFromParent()
+            waterDrops.remove(drop)
+        }
     }
     
     func handleTemperatureChange(newValue: Double) {
@@ -140,7 +212,7 @@ class SimulationScene: SKScene {
         let scaleYAction = SKAction.scaleY(to: max(0.4, meltRatio), duration: 0.3) // Don't flatten completely
         
         // Color transition: Ice looks dirtier/clearer as it melts
-        let targetColor = UIColor.white.withAlphaComponent(CGFloat(max(0.3, meltRatio)))
+        let targetColor = SKColor.white.withAlphaComponent(CGFloat(max(0.3, meltRatio)))
         let colorAction = SKAction.run { [weak self] in
             self?.iceNode.fillColor = targetColor
         }

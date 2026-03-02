@@ -72,7 +72,7 @@ struct ContentView: View {
                     // Educational Prompt
                     HStack(alignment: .top, spacing: 16) {
                         Group {
-                            if #available(iOS 17.0, *) {
+                            if #available(iOS 17.0, macOS 14.0, *) {
                                 Image(systemName: iconForTemp)
                                     .symbolEffect(.bounce, value: envState.temperature)
                             } else {

@@ -2,7 +2,9 @@ import Foundation
 import CoreMotion
 
 class MotionManager: ObservableObject {
+    #if os(iOS)
     private let motionManager = CMMotionManager()
+    #endif
     @Published var pitch: Double = 0.0
     @Published var roll: Double = 0.0
     
@@ -11,6 +13,7 @@ class MotionManager: ObservableObject {
     }
     
     func startMotionUpdates() {
+        #if os(iOS)
         if motionManager.isDeviceMotionAvailable {
             motionManager.deviceMotionUpdateInterval = 1.0 / 60.0
             motionManager.startDeviceMotionUpdates(to: .main) { [weak self] (data, error) in
@@ -19,10 +22,13 @@ class MotionManager: ObservableObject {
                 self?.roll = data.attitude.roll
             }
         }
+        #endif
     }
     
     deinit {
+        #if os(iOS)
         motionManager.stopDeviceMotionUpdates()
+        #endif
     }
 }
 
