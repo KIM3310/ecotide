@@ -1,0 +1,3 @@
+# Debug artifacts
+.venv_*/
+.build/
