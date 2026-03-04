@@ -20,3 +20,18 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 
 ## Notes
 - Keep generated/runtime artifacts out of git (`.build/`, `.swiftpm/`, `DerivedData/`).
+
+<!-- codex:local-verification:start -->
+## Local Verification
+```bash
+swift --version
+test -f Package.swift
+# Full Xcode installation may be required for iOS app package plugins
+```
+
+## Repository Hygiene
+- Keep runtime artifacts out of commits (`.codex_runs/`, cache folders, temporary venvs).
+- Prefer running verification commands above before opening a PR.
+
+_Last updated: 2026-03-04_
+<!-- codex:local-verification:end -->
