@@ -16,6 +16,7 @@ class SimulationScene: SKScene {
     
     private var lastTemp: Double = 1.0
     private var meltTimer: TimeInterval = 0
+    private var telemetryTimer: TimeInterval = 0
     private var spawnBatchSize: Int = 1
     
     override func didMove(to view: SKView) {
@@ -23,9 +24,11 @@ class SimulationScene: SKScene {
         self.physicsBody = SKPhysicsBody(edgeLoopFrom: self.frame)
         self.physicsBody?.friction = 0.5
         self.physicsBody?.restitution = 0.1
+        self.physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
         
         setupEnvironment()
         spawnInitialWater()
+        updateTelemetrySnapshot()
     }
     
     func setupEnvironment() {
@@ -86,6 +89,29 @@ class SimulationScene: SKScene {
         addChild(drop)
         waterDrops.insert(drop)
     }
+
+    func resetScenario() {
+        for drop in waterDrops {
+            drop.removeFromParent()
+        }
+        waterDrops.removeAll()
+
+        iceNode.removeAllActions()
+        iceNode.xScale = 1.0
+        iceNode.yScale = 1.0
+        iceNode.fillColor = UIColor.white.withAlphaComponent(0.9)
+
+        meltTimer = 0
+        telemetryTimer = 0
+        spawnBatchSize = 1
+        lastTemp = 1.0
+        physicsWorld.gravity = CGVector(dx: 0, dy: -9.8)
+
+        spawnInitialWater()
+        envState?.temperature = 1.0
+        envState?.resetTelemetry()
+        updateTelemetrySnapshot()
+    }
     
     override func update(_ currentTime: TimeInterval) {
         // 1. Butter-smooth Gravity vector mapping via CoreMotion
@@ -98,6 +124,11 @@ class SimulationScene: SKScene {
             // LERP (Linear Interpolation) for fluid gravity transition
             let smoothedDx = currentGravity.dx + (targetDx - currentGravity.dx) * 0.1
             let smoothedDy = currentGravity.dy + (targetDy - currentGravity.dy) * 0.1
+            self.physicsWorld.gravity = CGVector(dx: smoothedDx, dy: smoothedDy)
+        } else {
+            let currentGravity = self.physicsWorld.gravity
+            let smoothedDx = currentGravity.dx * 0.92
+            let smoothedDy = currentGravity.dy + (-9.8 - currentGravity.dy) * 0.08
             self.physicsWorld.gravity = CGVector(dx: smoothedDx, dy: smoothedDy)
         }
         
@@ -130,6 +161,12 @@ class SimulationScene: SKScene {
                 }
             }
         }
+
+        telemetryTimer += 0.016
+        if telemetryTimer >= 0.12 {
+            telemetryTimer = 0
+            updateTelemetrySnapshot()
+        }
     }
     
     func handleTemperatureChange(newValue: Double) {
@@ -147,5 +184,27 @@ class SimulationScene: SKScene {
         
         let group = SKAction.group([scaleAction, scaleYAction, colorAction])
         iceNode.run(group)
+    }
+
+    private func updateTelemetrySnapshot() {
+        guard let env = envState else { return }
+
+        let iceIntegrity = max(0.0, min(1.0, Double(iceNode.xScale)))
+        let localWaterline = waterDrops
+            .filter { $0.position.x < frame.midX }
+            .map(\.position.y)
+            .max() ?? frame.minY
+        let habitatFloor = villageHouse.position.y - 25
+        let directExposure = Double((localWaterline - (habitatFloor - 140)) / 180)
+        let waterPressure = Double(waterDrops.count) / Double(maxWaterDrops)
+        let floodRisk = min(1.0, max(0.0, max(directExposure, (waterPressure * 0.55) + ((1.0 - iceIntegrity) * 0.45))))
+
+        env.updateTelemetry(
+            waterDropCount: waterDrops.count,
+            iceIntegrity: iceIntegrity,
+            floodRisk: floodRisk,
+            gravity: physicsWorld.gravity,
+            motionAvailable: motionManager?.motionAvailable ?? false
+        )
     }
 }

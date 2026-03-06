@@ -76,6 +76,65 @@ struct ContentView: View {
                 .background(.ultraThinMaterial)
                 .clipShape(Capsule())
                 .padding(.top, 12)
+
+                VStack(spacing: 14) {
+                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+                        SignalCard(
+                            title: "Thermal Phase",
+                            value: envState.thermalPhase,
+                            detail: "Ice integrity \(percentString(envState.iceIntegrity))"
+                        )
+                        SignalCard(
+                            title: "Water Load",
+                            value: "\(envState.waterDropCount) droplets",
+                            detail: "Flood risk \(percentString(envState.floodRisk))"
+                        )
+                        SignalCard(
+                            title: "Habitat",
+                            value: envState.habitatStatus,
+                            detail: envState.motionGuidance
+                        )
+                        SignalCard(
+                            title: "Gravity",
+                            value: String(format: "%.1f m/s²", envState.gravityMagnitude),
+                            detail: "Scenario \(envState.severityLabel)"
+                        )
+                    }
+
+                    HStack(alignment: .center, spacing: 16) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Next Action")
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.white.opacity(0.68))
+                                .textCase(.uppercase)
+                            Text(envState.recommendedAction)
+                                .font(.subheadline.weight(.medium))
+                                .foregroundColor(.white)
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+
+                        Spacer()
+
+                        Button {
+                            scene.resetScenario()
+                        } label: {
+                            Label("Reset Scenario", systemImage: "arrow.counterclockwise")
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 14)
+                                .padding(.vertical, 10)
+                                .background(Color.white.opacity(0.08))
+                                .clipShape(Capsule())
+                        }
+                        .buttonStyle(.plain)
+                        .foregroundColor(.white)
+                    }
+                    .padding(.horizontal, 18)
+                    .padding(.vertical, 16)
+                    .background(.ultraThinMaterial)
+                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+                }
+                .padding(.horizontal, 30)
+                .padding(.top, 18)
                 
                 Spacer()
                 
@@ -177,5 +236,39 @@ struct ContentView: View {
         scene.motionManager = motionManager
         scene.envState = envState
         return scene
+    }
+
+    private func percentString(_ value: Double) -> String {
+        String(format: "%.0f%%", max(0.0, min(1.0, value)) * 100.0)
+    }
+}
+
+private struct SignalCard: View {
+    let title: String
+    let value: String
+    let detail: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.white.opacity(0.65))
+                .textCase(.uppercase)
+            Text(value)
+                .font(.headline.weight(.semibold))
+                .foregroundColor(.white)
+            Text(detail)
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.72))
+                .fixedSize(horizontal: false, vertical: true)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 20, style: .continuous)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
     }
 }
