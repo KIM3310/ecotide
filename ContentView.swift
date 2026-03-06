@@ -64,6 +64,18 @@ struct ContentView: View {
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 40)
+
+                HStack(spacing: 10) {
+                    Label(motionManager.motionAvailable ? "Motion Ready" : "Motion Unavailable", systemImage: motionManager.motionAvailable ? "gyroscope" : "ipad")
+                    Text("Severity: \(envState.severityLabel)")
+                }
+                .font(.caption.weight(.medium))
+                .foregroundColor(.white.opacity(0.78))
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(.ultraThinMaterial)
+                .clipShape(Capsule())
+                .padding(.top, 12)
                 
                 Spacer()
                 
