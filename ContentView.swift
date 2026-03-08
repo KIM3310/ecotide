@@ -316,6 +316,19 @@ struct ContentView: View {
                 .foregroundColor(.white)
 
                 Button {
+                    copyReviewRoutes()
+                } label: {
+                    Label("Copy Review Routes", systemImage: "point.topleft.down.curvedto.point.bottomright.up")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.08))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
                     focusCriticalScenario()
                 } label: {
                     Label("Jump to Critical", systemImage: "flame.fill")
@@ -349,6 +362,8 @@ struct ContentView: View {
             "Contract: \(reviewPack.contract)",
             "Headline: \(reviewPack.headline)",
             "Motion Mode: \(reviewPack.motionMode)",
+            "Review Routes:",
+            reviewPack.reviewRoutes.joined(separator: "\n"),
             "2-Minute Review:",
             reviewPack.twoMinuteReview.joined(separator: "\n"),
             "Review Sequence:",
@@ -364,6 +379,24 @@ struct ContentView: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(payload, forType: .string)
         reviewerActionStatus = "Copied simulation review pack."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func copyReviewRoutes() {
+        let payload = [
+            "EcoTide review routes:",
+            reviewPack.reviewRoutes.joined(separator: "\n")
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied simulation review routes."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied simulation review routes."
         #else
         reviewerActionStatus = "Clipboard copy is unavailable on this platform."
         #endif

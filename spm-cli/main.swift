@@ -11,7 +11,14 @@ let payload: [String: Any] = [
         "supports_motion_input": true,
         "telemetry_overlay": true,
         "motion_mode": "stable-gravity-fallback",
-        "telemetry_surface_count": 5
+        "telemetry_surface_count": 5,
+        "review_routes": [
+            "Review Pack card",
+            "Telemetry deck",
+            "Jump to Critical",
+            "Reset Scenario control",
+            "EcoTideCLI fallback contract"
+        ]
     ],
     "two_minute_review": [
         "Confirm that this CLI output is a fallback contract rather than the full rendering path.",
