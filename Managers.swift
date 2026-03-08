@@ -8,6 +8,7 @@ struct SimulationReviewPack {
     let headline: String
     let motionMode: String
     let telemetrySurfaceCount: Int
+    let reviewRoutes: [String]
     let twoMinuteReview: [String]
     let reviewSequence: [String]
     let trustBoundary: [String]
@@ -76,6 +77,13 @@ final class EnvironmentState: ObservableObject {
             headline: "Reviewer pack for a motion-driven climate simulator with telemetry overlay and simulator-safe gravity fallback.",
             motionMode: motionAvailable ? "coremotion-live" : "stable-gravity-fallback",
             telemetrySurfaceCount: 5,
+            reviewRoutes: [
+                "Review Pack card",
+                "Telemetry deck",
+                "Jump to Critical",
+                "Reset Scenario control",
+                "EcoTideCLI fallback contract"
+            ],
             twoMinuteReview: [
                 "Confirm whether motion is live or fallback before interpreting the gravity vector.",
                 "Read the telemetry deck together: ice integrity, water load, habitat risk, gravity, and next action.",
