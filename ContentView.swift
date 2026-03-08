@@ -1,5 +1,10 @@
 import SwiftUI
 import SpriteKit
+#if canImport(UIKit)
+import UIKit
+#elseif canImport(AppKit)
+import AppKit
+#endif
 
 struct ContentView: View {
     @StateObject private var motionManager = MotionManager()
@@ -7,6 +12,7 @@ struct ContentView: View {
     
     // Store scene in State to prevent physics engine resets on UI updates
     @State private var scene = SimulationScene()
+    @State private var reviewerActionStatus = "Reviewer shortcuts keep the simulation proof path ready for demo capture."
     
     var body: some View {
         ZStack {
@@ -294,6 +300,39 @@ struct ContentView: View {
                 ReviewList(title: "Proof Assets", items: reviewPack.proofAssets)
                 ReviewList(title: "Watchouts", items: reviewPack.watchouts)
             }
+
+            HStack(spacing: 12) {
+                Button {
+                    copyReviewPack()
+                } label: {
+                    Label("Copy Review Pack", systemImage: "doc.on.doc")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.08))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
+                    focusCriticalScenario()
+                } label: {
+                    Label("Jump to Critical", systemImage: "flame.fill")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.red.opacity(0.18))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+            }
+
+            Text(reviewerActionStatus)
+                .font(.caption)
+                .foregroundColor(.white.opacity(0.72))
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 18)
         .padding(.vertical, 16)
@@ -303,6 +342,37 @@ struct ContentView: View {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .stroke(Color.white.opacity(0.08), lineWidth: 1)
         )
+    }
+
+    private func copyReviewPack() {
+        let payload = [
+            "Contract: \(reviewPack.contract)",
+            "Headline: \(reviewPack.headline)",
+            "Motion Mode: \(reviewPack.motionMode)",
+            "2-Minute Review:",
+            reviewPack.twoMinuteReview.joined(separator: "\n"),
+            "Review Sequence:",
+            reviewPack.reviewSequence.joined(separator: "\n"),
+            "Proof Assets:",
+            reviewPack.proofAssets.joined(separator: "\n")
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied simulation review pack."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied simulation review pack."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func focusCriticalScenario() {
+        scene.resetScenario()
+        envState.temperature = 4.6
+        reviewerActionStatus = "Jumped to the critical melt scenario for fast reviewer capture."
     }
 }
 
