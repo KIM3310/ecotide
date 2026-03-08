@@ -285,8 +285,13 @@ struct ContentView: View {
             }
 
             HStack(alignment: .top, spacing: 16) {
+                ReviewList(title: "2-Minute Review", items: reviewPack.twoMinuteReview)
                 ReviewList(title: "Review Sequence", items: reviewPack.reviewSequence)
                 ReviewList(title: "Trust Boundary", items: reviewPack.trustBoundary)
+            }
+
+            HStack(alignment: .top, spacing: 16) {
+                ReviewList(title: "Proof Assets", items: reviewPack.proofAssets)
                 ReviewList(title: "Watchouts", items: reviewPack.watchouts)
             }
         }
