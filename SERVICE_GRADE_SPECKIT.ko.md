@@ -13,6 +13,7 @@ Last updated: 2026-03-08
 ## E - Execution
 - simulation loop와 telemetry overlay의 의도를 README와 code structure에서 분명히 유지
 - CLI fallback / Swift package build를 검증 가능한 baseline으로 유지
+- simulation review pack을 in-app telemetry deck과 CLI fallback에 같이 노출
 - 이번 baseline에서 Swift CI를 추가해 기본 build health를 자동 확인
 
 ## C - Criteria
@@ -33,4 +34,3 @@ Last updated: 2026-03-08
 - `Package.swift`
 - `SimulationScene.swift`
 - `.github/workflows/ci.yml`
-

@@ -3,6 +3,16 @@ import CoreMotion
 import Foundation
 import SwiftUI
 
+struct SimulationReviewPack {
+    let contract: String
+    let headline: String
+    let motionMode: String
+    let telemetrySurfaceCount: Int
+    let reviewSequence: [String]
+    let trustBoundary: [String]
+    let watchouts: [String]
+}
+
 final class MotionManager: ObservableObject {
     private let motionManager = CMMotionManager()
     @Published var pitch: Double = 0.0
@@ -56,6 +66,30 @@ final class EnvironmentState: ObservableObject {
         if temperature < 2.0 { return "Cold shelf" }
         if temperature < 4.0 { return "Rapid melt" }
         return "Failure zone"
+    }
+
+    func buildReviewPack(motionAvailable: Bool) -> SimulationReviewPack {
+        SimulationReviewPack(
+            contract: "ecotide-review-pack-v1",
+            headline: "Reviewer pack for a motion-driven climate simulator with telemetry overlay and simulator-safe gravity fallback.",
+            motionMode: motionAvailable ? "coremotion-live" : "stable-gravity-fallback",
+            telemetrySurfaceCount: 5,
+            reviewSequence: [
+                "Confirm motion availability before interpreting gravity changes as live device input.",
+                "Read telemetry overlay values together: ice integrity, water load, habitat risk, gravity, and next action.",
+                "Use the reset scenario control after critical flood conditions so the simulation remains reproducible."
+            ],
+            trustBoundary: [
+                "Physics and telemetry are computed locally inside the simulation scene rather than from remote services.",
+                "When motion input is unavailable, gravity intentionally falls back to a stable baseline for simulator consistency.",
+                "The telemetry deck is a reviewer surface, not a scientific forecast or external climate model."
+            ],
+            watchouts: [
+                "High particle counts increase visual drama but do not represent real-world hydrodynamic precision.",
+                "Device tilt can change the perceived severity quickly; reviewers should separate motion input from thermal input.",
+                "The fallback CLI verifies contract posture, not the full SpriteKit rendering path."
+            ]
+        )
     }
 
     func updateTelemetry(
