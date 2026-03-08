@@ -132,6 +132,8 @@ struct ContentView: View {
                     .padding(.vertical, 16)
                     .background(.ultraThinMaterial)
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+
+                    reviewPackCard
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 18)
@@ -238,8 +240,64 @@ struct ContentView: View {
         return scene
     }
 
+    private var reviewPack: SimulationReviewPack {
+        envState.buildReviewPack(motionAvailable: motionManager.motionAvailable)
+    }
+
     private func percentString(_ value: Double) -> String {
         String(format: "%.0f%%", max(0.0, min(1.0, value)) * 100.0)
+    }
+
+    private var reviewPackCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Review Pack")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.65))
+                        .textCase(.uppercase)
+                    Text(reviewPack.headline)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(.white)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                Spacer()
+                Text(reviewPack.contract)
+                    .font(.caption.monospaced())
+                    .foregroundColor(.white.opacity(0.75))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.08))
+                    .clipShape(Capsule())
+            }
+
+            HStack(spacing: 12) {
+                SignalCard(
+                    title: "Motion Mode",
+                    value: reviewPack.motionMode,
+                    detail: motionManager.motionAvailable ? "Live device tilt available" : "Simulator-safe fallback active"
+                )
+                SignalCard(
+                    title: "Telemetry",
+                    value: "\(reviewPack.telemetrySurfaceCount) surfaces",
+                    detail: "Ice, water, habitat, gravity, next action"
+                )
+            }
+
+            HStack(alignment: .top, spacing: 16) {
+                ReviewList(title: "Review Sequence", items: reviewPack.reviewSequence)
+                ReviewList(title: "Trust Boundary", items: reviewPack.trustBoundary)
+                ReviewList(title: "Watchouts", items: reviewPack.watchouts)
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
     }
 }
 
@@ -270,5 +328,32 @@ private struct SignalCard: View {
             RoundedRectangle(cornerRadius: 20, style: .continuous)
                 .stroke(Color.white.opacity(0.08), lineWidth: 1)
         )
+    }
+}
+
+private struct ReviewList: View {
+    let title: String
+    let items: [String]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.caption.weight(.semibold))
+                .foregroundColor(.white.opacity(0.68))
+                .textCase(.uppercase)
+            ForEach(items, id: \.self) { item in
+                HStack(alignment: .top, spacing: 8) {
+                    Circle()
+                        .fill(Color.white.opacity(0.7))
+                        .frame(width: 5, height: 5)
+                        .padding(.top, 6)
+                    Text(item)
+                        .font(.caption)
+                        .foregroundColor(.white.opacity(0.82))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
