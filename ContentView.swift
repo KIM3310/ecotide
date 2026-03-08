@@ -329,6 +329,19 @@ struct ContentView: View {
                 .foregroundColor(.white)
 
                 Button {
+                    copyCriticalSnapshot()
+                } label: {
+                    Label("Copy Critical Snapshot", systemImage: "waveform.path.ecg")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.orange.opacity(0.16))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
                     focusCriticalScenario()
                 } label: {
                     Label("Jump to Critical", systemImage: "flame.fill")
@@ -362,6 +375,7 @@ struct ContentView: View {
             "Contract: \(reviewPack.contract)",
             "Headline: \(reviewPack.headline)",
             "Motion Mode: \(reviewPack.motionMode)",
+            "Focused Snapshot: \(reviewPack.focusedSnapshot)",
             "Review Routes:",
             reviewPack.reviewRoutes.joined(separator: "\n"),
             "2-Minute Review:",
@@ -397,6 +411,29 @@ struct ContentView: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(payload, forType: .string)
         reviewerActionStatus = "Copied simulation review routes."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func copyCriticalSnapshot() {
+        let payload = [
+            "EcoTide critical snapshot",
+            "Severity: \(envState.severityLabel)",
+            "Habitat: \(envState.habitatStatus)",
+            "Phase: \(envState.thermalPhase)",
+            "Motion: \(reviewPack.motionMode)",
+            "Focused Snapshot: \(reviewPack.focusedSnapshot)",
+            "Focused Route: \(reviewPack.reviewRoutes.joined(separator: " -> "))"
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied critical reviewer snapshot."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied critical reviewer snapshot."
         #else
         reviewerActionStatus = "Clipboard copy is unavailable on this platform."
         #endif

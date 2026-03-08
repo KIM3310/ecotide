@@ -8,6 +8,7 @@ struct SimulationReviewPack {
     let headline: String
     let motionMode: String
     let telemetrySurfaceCount: Int
+    let focusedSnapshot: String
     let reviewRoutes: [String]
     let twoMinuteReview: [String]
     let reviewSequence: [String]
@@ -77,6 +78,7 @@ final class EnvironmentState: ObservableObject {
             headline: "Reviewer pack for a motion-driven climate simulator with telemetry overlay and simulator-safe gravity fallback.",
             motionMode: motionAvailable ? "coremotion-live" : "stable-gravity-fallback",
             telemetrySurfaceCount: 5,
+            focusedSnapshot: "\(severityLabel) / \(habitatStatus) / \(recommendedAction)",
             reviewRoutes: [
                 "Review Pack card",
                 "Telemetry deck",

@@ -7,6 +7,7 @@ let payload: [String: Any] = [
     "surface": "motion-driven climate simulator",
     "readiness_contract": "ecotide-review-pack-v1",
     "headline": "CLI fallback surface for EcoTide review posture and telemetry contract.",
+    "focused_snapshot": "Critical / Village at risk / Open the package in Xcode to run the full SwiftUI + SpriteKit experience.",
     "proof_bundle": [
         "supports_motion_input": true,
         "telemetry_overlay": true,
