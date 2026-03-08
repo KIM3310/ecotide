@@ -8,8 +8,10 @@ struct SimulationReviewPack {
     let headline: String
     let motionMode: String
     let telemetrySurfaceCount: Int
+    let twoMinuteReview: [String]
     let reviewSequence: [String]
     let trustBoundary: [String]
+    let proofAssets: [String]
     let watchouts: [String]
 }
 
@@ -74,6 +76,12 @@ final class EnvironmentState: ObservableObject {
             headline: "Reviewer pack for a motion-driven climate simulator with telemetry overlay and simulator-safe gravity fallback.",
             motionMode: motionAvailable ? "coremotion-live" : "stable-gravity-fallback",
             telemetrySurfaceCount: 5,
+            twoMinuteReview: [
+                "Confirm whether motion is live or fallback before interpreting the gravity vector.",
+                "Read the telemetry deck together: ice integrity, water load, habitat risk, gravity, and next action.",
+                "Use reset after a critical flood scenario so reviewers can reproduce the same observation path.",
+                "Treat the CLI review pack as a contract fallback, not as proof of the full SpriteKit rendering path."
+            ],
             reviewSequence: [
                 "Confirm motion availability before interpreting gravity changes as live device input.",
                 "Read telemetry overlay values together: ice integrity, water load, habitat risk, gravity, and next action.",
@@ -83,6 +91,12 @@ final class EnvironmentState: ObservableObject {
                 "Physics and telemetry are computed locally inside the simulation scene rather than from remote services.",
                 "When motion input is unavailable, gravity intentionally falls back to a stable baseline for simulator consistency.",
                 "The telemetry deck is a reviewer surface, not a scientific forecast or external climate model."
+            ],
+            proofAssets: [
+                "Telemetry Deck (in-app): ice integrity, water load, habitat risk, gravity, and next action",
+                "Motion Mode Badge: live CoreMotion versus stable gravity fallback",
+                "Reset Scenario Control: restores a reproducible observation state",
+                "EcoTideCLI: emits ecotide-review-pack-v1 for non-iOS review environments"
             ],
             watchouts: [
                 "High particle counts increase visual drama but do not represent real-world hydrodynamic precision.",
