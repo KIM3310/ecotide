@@ -291,7 +291,7 @@ struct ContentView: View {
             }
 
             HStack(alignment: .top, spacing: 16) {
-                ReviewList(title: "2-Minute Review", items: reviewPack.twoMinuteReview)
+                ReviewList(title: "Quick Review", items: reviewPack.twoMinuteReview)
                 ReviewList(title: "Review Sequence", items: reviewPack.reviewSequence)
                 ReviewList(title: "Trust Boundary", items: reviewPack.trustBoundary)
             }
@@ -391,7 +391,7 @@ struct ContentView: View {
             "Focused Snapshot: \(reviewPack.focusedSnapshot)",
             "Review Routes:",
             reviewPack.reviewRoutes.joined(separator: "\n"),
-            "2-Minute Review:",
+            "Quick Review:",
             reviewPack.twoMinuteReview.joined(separator: "\n"),
             "Review Sequence:",
             reviewPack.reviewSequence.joined(separator: "\n"),
