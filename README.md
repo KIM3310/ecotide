@@ -25,7 +25,7 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - Simulator and non-motion devices fall back to stable gravity so the scene keeps behaving predictably.
 - The CLI fallback emits `ecotide-review-pack-v1` so reviewers can inspect posture even without the iOS rendering path.
 
-## 2-Minute Review Path
+## Quick Review Path
 - Confirm whether motion is live or fallback before interpreting gravity changes.
 - Read the telemetry deck together: ice integrity, water load, habitat risk, gravity, and next action.
 - Use reset after a critical flood scenario so reviewers can reproduce the same path.
@@ -37,7 +37,6 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - `Reset Scenario Control` -> reproducible observation path
 - `EcoTideCLI` -> `ecotide-review-pack-v1` fallback contract for non-iOS environments
 
-<!-- codex:local-verification:start -->
 ## Local Verification
 ```bash
 swift --version
@@ -49,6 +48,3 @@ swift run EcoTideCLI
 ## Repository Hygiene
 - Keep runtime artifacts out of commits (`.codex_runs/`, cache folders, temporary venvs).
 - Prefer running verification commands above before opening a PR.
-
-_Last updated: 2026-03-04_
-<!-- codex:local-verification:end -->
