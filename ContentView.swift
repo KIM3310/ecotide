@@ -342,6 +342,19 @@ struct ContentView: View {
                 .foregroundColor(.white)
 
                 Button {
+                    copyMotionSnapshot()
+                } label: {
+                    Label("Copy Motion Snapshot", systemImage: "gyroscope")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.cyan.opacity(0.16))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
                     focusCriticalScenario()
                 } label: {
                     Label("Jump to Critical", systemImage: "flame.fill")
@@ -434,6 +447,31 @@ struct ContentView: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(payload, forType: .string)
         reviewerActionStatus = "Copied critical reviewer snapshot."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func copyMotionSnapshot() {
+        let payload = [
+            "EcoTide motion snapshot",
+            "Motion Mode: \(reviewPack.motionMode)",
+            "Gravity: \(String(format: "%.1f", envState.gravityMagnitude)) m/s²",
+            "Guidance: \(envState.motionGuidance)",
+            "Focused Snapshot: \(reviewPack.focusedSnapshot)",
+            "Trust Boundary:",
+            reviewPack.trustBoundary.joined(separator: "\n"),
+            "Watchouts:",
+            reviewPack.watchouts.joined(separator: "\n")
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied motion reviewer snapshot."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied motion reviewer snapshot."
         #else
         reviewerActionStatus = "Clipboard copy is unavailable on this platform."
         #endif
