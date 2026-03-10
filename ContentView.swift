@@ -355,6 +355,19 @@ struct ContentView: View {
                 .foregroundColor(.white)
 
                 Button {
+                    copyReviewerBundle()
+                } label: {
+                    Label("Copy Reviewer Bundle", systemImage: "shippingbox.fill")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.12))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
                     focusCriticalScenario()
                 } label: {
                     Label("Jump to Critical", systemImage: "flame.fill")
@@ -472,6 +485,36 @@ struct ContentView: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(payload, forType: .string)
         reviewerActionStatus = "Copied motion reviewer snapshot."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func copyReviewerBundle() {
+        let payload = [
+            "EcoTide reviewer bundle",
+            "Contract: \(reviewPack.contract)",
+            "Headline: \(reviewPack.headline)",
+            "Motion Mode: \(reviewPack.motionMode)",
+            "Focused Snapshot: \(reviewPack.focusedSnapshot)",
+            "",
+            "Review Routes:",
+            reviewPack.reviewRoutes.joined(separator: "\n"),
+            "",
+            "Trust Boundary:",
+            reviewPack.trustBoundary.joined(separator: "\n"),
+            "",
+            "Proof Assets:",
+            reviewPack.proofAssets.joined(separator: "\n"),
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied reviewer bundle."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied reviewer bundle."
         #else
         reviewerActionStatus = "Clipboard copy is unavailable on this platform."
         #endif

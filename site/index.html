@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  
+  <meta name="description" content="SwiftUI environmental simulation app with motion-driven gravity interaction and live telemetry overlays.">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="EcoTide">
+  <meta property="og:description" content="SwiftUI environmental simulation app with motion-driven gravity interaction and live telemetry overlays.">
+  <meta property="og:image" content="/review-pack.svg">
+  <meta property="og:image:alt" content="EcoTide review pack preview card">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="EcoTide">
+  <meta name="twitter:description" content="SwiftUI environmental simulation app with motion-driven gravity interaction and live telemetry overlays.">
+  <meta name="twitter:image" content="/review-pack.svg">
+  <title>EcoTide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#eef6f6; --panel:#faffff; --ink:#142025; --muted:#54666f; --line:#cedde0; --accent:#0e7490; --soft:#e6f7fb; }
+    *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans",sans-serif;background:linear-gradient(180deg,#f8fdfd 0,#e9f1f1 100%);color:var(--ink)}
+    .shell{max-width:1100px;margin:0 auto;padding:32px 20px 56px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 18px 40px rgba(15,23,42,.05)}
+    .hero,.grid{display:grid;gap:16px}.hero{margin-bottom:18px}.eyebrow,.chip{display:inline-flex;padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700}.eyebrow{background:#102028;color:#fff}.chip{background:var(--soft);color:var(--accent)}
+    h1,h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.04em;margin:0}.hero h1{font-size:clamp(2.4rem,4.8vw,4.4rem);line-height:.96}.lede{max-width:840px;margin:0;color:var(--muted);line-height:1.75}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.list{margin:0;padding-left:18px;color:var(--muted);line-height:1.8}.links a{color:var(--accent);text-decoration:none;font-weight:600}
+    @media (max-width:900px){.two{grid-template-columns:1fr}}
+  
+    .quick-actions{margin-top:18px}.quick-actions .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.quick-actions .action-btn{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}.quick-actions .action-btn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 10px 24px rgba(15,23,42,.08)}.quick-actions .hint{margin:10px 0 0;color:var(--muted);font-size:.92rem;line-height:1.6}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="panel hero">
+      <div>
+        <span class="eyebrow">EcoTide</span>
+        <span class="chip">SwiftUI</span>
+        <span class="chip">simulation</span>
+      </div>
+      <h1>Motion-driven environmental simulation with reviewer-friendly telemetry.</h1>
+      <p class="lede">EcoTide is a simulation you understand by watching the scene respond, not by reading a fake browser clone. This page gives reviewers the contract, the scenario entry points, and the shortest route into the native proof.</p>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <h2>What it shows</h2>
+        <ul class="list">
+          <li>Gravity interaction driven by motion input.</li>
+          <li>Live telemetry for ice integrity, habitat risk, and system state.</li>
+          <li>Fallback mode when motion sensors are unavailable.</li>
+          <li>A review-pack mindset even in a simulation app.</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h2>Why the proof stays in the app</h2>
+        <ul class="list">
+          <li>The meaningful proof is the rendered simulation reacting to motion input or fallback mode.</li>
+          <li>The CLI exists to preserve reviewer posture, not to stand in for the visual simulation.</li>
+          <li>This page keeps the repo legible without flattening the project into a web-only story.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel links">
+        <h2>Documentation</h2>
+        <ul class="list">
+          <li><a href="https://github.com/KIM3310/ecotide/blob/main/README.md">README</a></li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h2>Review path</h2>
+        <ul class="list">
+          <li>Open the repo README.</li>
+          <li>Run the CLI fallback for the `ecotide-review-pack-v1` contract.</li>
+          <li>Use Xcode/simulator for the real rendering and motion experience.</li>
+        </ul>
+      </article>
+    </section>
+
+
+
+    <section class="panel quick-actions">
+      <h2>Simulation handoff bar</h2>
+      <p class="hint">Shortcut keys: C review path · B telemetry brief · ? help</p>
+      <div class="action-row">
+        <button id="copyReviewPathBtn" class="action-btn" type="button">Copy Review Path</button>
+        <button id="copyReviewerBriefBtn" class="action-btn" type="button">Copy Telemetry Brief</button>
+      </div>
+      <p id="quickActionStatus" class="hint">Use this bar when you need a short handoff that keeps the focus on telemetry and scene behavior. Shortcut keys: C review path · B telemetry brief · ? help</p>
+    </section>
+  </main>
+
+
+
+  <script>
+    async function copyQuickActionText(text) {
+      if (!text) return false;
+      try {
+        if (navigator.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+      } catch (_error) {
+        // Fallback below.
+      }
+      try {
+        const helper = document.createElement("textarea");
+        helper.value = text;
+        helper.style.position = "fixed";
+        helper.style.opacity = "0";
+        document.body.appendChild(helper);
+        helper.focus();
+        helper.select();
+        const ok = document.execCommand("copy");
+        document.body.removeChild(helper);
+        return Boolean(ok);
+      } catch (_error) {
+        return false;
+      }
+    }
+
+    const quickActionStatus = document.getElementById("quickActionStatus");
+    const reviewPathPayload = 'EcoTide review path\n- Read the README for motion-driven simulation scope.\n- Run the CLI fallback for the ecotide-review-pack-v1 contract.\n- Use Xcode or simulator for the real rendering and motion path.';
+    const reviewerBriefPayload = 'EcoTide reviewer brief\nHeadline: Motion-driven environmental simulation with reviewer-friendly telemetry.\nNative proof: SwiftUI simulation on device or simulator.\nFallback proof: swift run EcoTideCLI --scenario stable --motion live\nPublic surface: a lightweight reviewer landing page for the native simulation.';
+
+    async function runQuickCopy(text, successLabel, failureLabel) {
+      const ok = await copyQuickActionText(text);
+      if (quickActionStatus) {
+        quickActionStatus.textContent = ok ? successLabel : failureLabel;
+      }
+    }
+
+    document.getElementById("copyReviewPathBtn")?.addEventListener("click", () => runQuickCopy(reviewPathPayload, "Review path copied.", "Failed to copy review path."));
+    document.getElementById("copyReviewerBriefBtn")?.addEventListener("click", () => runQuickCopy(reviewerBriefPayload, "Telemetry brief copied.", "Failed to copy telemetry brief."));
+
+    window.addEventListener("keydown", (event) => {
+      if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
+      const target = event.target;
+      if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable)) return;
+      const key = String(event.key || "").toLowerCase();
+      if (key === "?") {
+        event.preventDefault();
+        if (quickActionStatus) {
+          quickActionStatus.textContent = "Shortcut keys: C review path · B telemetry brief · ? help";
+        }
+        return;
+      }
+      if (key === "c") {
+        event.preventDefault();
+        void runQuickCopy(reviewPathPayload, "Review path copied.", "Failed to copy review path.");
+      }
+      if (key === "b") {
+        event.preventDefault();
+        void runQuickCopy(reviewerBriefPayload, "Telemetry brief copied.", "Failed to copy telemetry brief.");
+      }
+    });
+  </script>
+</body>
+</html>
