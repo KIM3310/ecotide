@@ -6,6 +6,12 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - Treat this repo as a native simulation; the CLI is a reviewer fallback, not the product itself.
 - The strongest proof is the rendered scene, telemetry deck, and scenario controls.
 
+
+## Role signals
+- **AI / systems engineer:** simulation telemetry, fallback posture, and reviewer CLI surfaces are all kept explicit.
+- **Solution architect:** the repo makes clear what belongs to the native scene and what belongs to the review contract.
+- **Field / sales engineer:** scenario presets make the story easy to replay in a live walkthrough.
+
 ## Tech Stack
 - Swift 5.6+
 - SwiftUI
