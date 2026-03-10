@@ -29,11 +29,11 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - `Managers.swift`: shared managers/utilities
 - `spm-cli/main.swift`: CLI fallback status surface for non-iOS environments
 - `site/index.html`: static review/deploy wrapper for the public Pages surface
-- `CLOUDFLARE_PAGES.md`: deploy notes for the static review wrapper
+- `docs/deployment/CLOUDFLARE_PAGES.md`: deploy notes for the static review wrapper
 
 ## Docs Map
 - `README.md`: product overview, run steps, and review flow
-- `CLOUDFLARE_PAGES.md`: Cloudflare Pages deployment notes for `site/`
+- `docs/deployment/CLOUDFLARE_PAGES.md`: Cloudflare Pages deployment notes for `site/`
 - `site/index.html`: public review wrapper
 
 ## Run
