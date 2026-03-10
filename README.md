@@ -6,11 +6,15 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - Treat this repo as a native simulation; the CLI is a reviewer fallback, not the product itself.
 - The strongest proof is the rendered scene, telemetry deck, and scenario controls.
 
-
 ## Role signals
 - **AI / systems engineer:** simulation telemetry, fallback posture, and reviewer CLI surfaces are all kept explicit.
 - **Solution architect:** the repo makes clear what belongs to the native scene and what belongs to the review contract.
 - **Field / solutions engineer:** scenario presets make the review path easy to replay in a live walkthrough.
+
+## Start here
+- Primary product surface: the iOS SwiftUI package at the repo root (`Package.swift`, `MyApp.swift`, `ContentView.swift`, `SimulationScene.swift`)
+- Review/deploy surface: `site/` contains the static Pages wrapper, not the main app runtime
+- Non-iOS fallback: `spm-cli/` mirrors the reviewer-facing status contract when iOS rendering is unavailable
 
 ## Tech Stack
 - Swift 5.6+
@@ -24,6 +28,13 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - `SimulationScene.swift`: simulation rendering/logic
 - `Managers.swift`: shared managers/utilities
 - `spm-cli/main.swift`: CLI fallback status surface for non-iOS environments
+- `site/index.html`: static review/deploy wrapper for the public Pages surface
+- `CLOUDFLARE_PAGES.md`: deploy notes for the static review wrapper
+
+## Docs Map
+- `README.md`: product overview, run steps, and review flow
+- `CLOUDFLARE_PAGES.md`: Cloudflare Pages deployment notes for `site/`
+- `site/index.html`: public review wrapper
 
 ## Run
 1. Open the project in Xcode (iOS 16+).
