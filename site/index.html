@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EcoTide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root { --bg:#eef6f6; --panel:#faffff; --ink:#142025; --muted:#54666f; --line:#cedde0; --accent:#0e7490; --soft:#e6f7fb; }
+    *{box-sizing:border-box} body{margin:0;font-family:"IBM Plex Sans",sans-serif;background:linear-gradient(180deg,#f8fdfd 0,#e9f1f1 100%);color:var(--ink)}
+    .shell{max-width:1100px;margin:0 auto;padding:32px 20px 56px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:24px;padding:24px;box-shadow:0 18px 40px rgba(15,23,42,.05)}
+    .hero,.grid{display:grid;gap:16px}.hero{margin-bottom:18px}.eyebrow,.chip{display:inline-flex;padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700}.eyebrow{background:#102028;color:#fff}.chip{background:var(--soft);color:var(--accent)}
+    h1,h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.04em;margin:0}.hero h1{font-size:clamp(2.4rem,4.8vw,4.4rem);line-height:.96}.lede{max-width:840px;margin:0;color:var(--muted);line-height:1.75}
+    .two{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.list{margin:0;padding-left:18px;color:var(--muted);line-height:1.8}.links a{color:var(--accent);text-decoration:none;font-weight:600}
+    @media (max-width:900px){.two{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="panel hero">
+      <div>
+        <span class="eyebrow">EcoTide</span>
+        <span class="chip">SwiftUI</span>
+        <span class="chip">simulation</span>
+      </div>
+      <h1>Motion-driven environmental simulation with reviewer-friendly telemetry.</h1>
+      <p class="lede">EcoTide is an iOS SwiftUI simulation app. This free static site is a lightweight public surface for the project, while the real experience remains native on device or simulator.</p>
+    </section>
+
+    <section class="grid two">
+      <article class="panel">
+        <h2>What it shows</h2>
+        <ul class="list">
+          <li>Gravity interaction driven by motion input.</li>
+          <li>Live telemetry for ice integrity, habitat risk, and system state.</li>
+          <li>Fallback mode when motion sensors are unavailable.</li>
+          <li>A review-pack mindset even in a simulation app.</li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h2>Why this is a landing page</h2>
+        <ul class="list">
+          <li>The app is native-first, not browser-first.</li>
+          <li>The strongest proof is the simulator/device path plus CLI fallback, not a fake web clone.</li>
+          <li>This page keeps the repo discoverable without pretending the product is a web app.</li>
+        </ul>
+      </article>
+    </section>
+
+    <section class="grid two">
+      <article class="panel links">
+        <h2>Documentation</h2>
+        <ul class="list">
+          <li><a href="https://github.com/KIM3310/ecotide/blob/main/README.md">README</a></li>
+        </ul>
+      </article>
+      <article class="panel">
+        <h2>Review path</h2>
+        <ul class="list">
+          <li>Open the repo README.</li>
+          <li>Run the CLI fallback for the `ecotide-review-pack-v1` contract.</li>
+          <li>Use Xcode/simulator for the real rendering and motion experience.</li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
