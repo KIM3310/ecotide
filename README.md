@@ -39,6 +39,7 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 ## Run
 1. Open the project in Xcode (iOS 16+).
 2. Build and run the `EcoTide` app target on simulator/device.
+3. For a CLI sanity check, run `bash scripts/smoke_cli_review_pack.sh`.
 
 ## Notes
 - Keep generated/runtime artifacts out of git (`.build/`, `.swiftpm/`, `DerivedData/`).
@@ -57,12 +58,14 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - `Motion Mode Badge` -> live CoreMotion versus simulator-safe fallback
 - `Reset Scenario Control` -> reproducible observation path
 - `EcoTideCLI` -> `ecotide-review-pack-v1` fallback contract for non-iOS environments
+- `site/review-pack.svg` -> reviewer-facing summary card for the public landing page
 
 ## Local Verification
 ```bash
 swift --version
 test -f Package.swift
 swift run EcoTideCLI
+bash scripts/smoke_cli_review_pack.sh
 # Full Xcode installation may be required for iOS app package plugins
 ```
 
