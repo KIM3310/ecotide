@@ -368,6 +368,19 @@ struct ContentView: View {
                 .foregroundColor(.white)
 
                 Button {
+                    copyScenarioDecisionBrief()
+                } label: {
+                    Label("Copy Scenario Brief", systemImage: "text.quote")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.yellow.opacity(0.16))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
+
+                Button {
                     focusCriticalScenario()
                 } label: {
                     Label("Jump to Critical", systemImage: "flame.fill")
@@ -515,6 +528,33 @@ struct ContentView: View {
         NSPasteboard.general.clearContents()
         NSPasteboard.general.setString(payload, forType: .string)
         reviewerActionStatus = "Copied reviewer bundle."
+        #else
+        reviewerActionStatus = "Clipboard copy is unavailable on this platform."
+        #endif
+    }
+
+    private func copyScenarioDecisionBrief() {
+        let payload = [
+            "EcoTide scenario decision brief",
+            "Scenario: \(envState.severityLabel)",
+            "Habitat: \(envState.habitatStatus)",
+            "Phase: \(envState.thermalPhase)",
+            "Motion Mode: \(reviewPack.motionMode)",
+            "Gravity: \(String(format: "%.1f", envState.gravityMagnitude)) m/s²",
+            "Next Action: \(envState.recommendedAction)",
+            "Focused Snapshot: \(reviewPack.focusedSnapshot)",
+            "",
+            "Review Routes:",
+            reviewPack.reviewRoutes.joined(separator: "\n"),
+        ].joined(separator: "\n")
+
+        #if canImport(UIKit)
+        UIPasteboard.general.string = payload
+        reviewerActionStatus = "Copied scenario decision brief."
+        #elseif canImport(AppKit)
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(payload, forType: .string)
+        reviewerActionStatus = "Copied scenario decision brief."
         #else
         reviewerActionStatus = "Clipboard copy is unavailable on this platform."
         #endif
