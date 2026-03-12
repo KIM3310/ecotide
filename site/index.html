@@ -74,7 +74,7 @@
         </ul>
       </article>
       <article class="panel">
-        <h2>Try this first</h2>
+        <h2>Scenario review path</h2>
         <ul class="list">
           <li>Open the repo README.</li>
           <li>Run the CLI fallback for the `ecotide-review-pack-v1` contract.</li>
@@ -101,14 +101,14 @@
 
 
     <section class="panel quick-actions">
-      <h2>Start here</h2>
-      <p class="hint">Copy the review path first, then hand over telemetry or scenario context only if the reviewer needs more detail.</p>
+      <h2>Simulation handoff bar</h2>
+      <p class="hint">Copy the scenario path first, then hand over telemetry or scenario context only if the reviewer needs more detail.</p>
       <div class="action-row">
         <button id="copyReviewPathBtn" class="action-btn" type="button">Copy Review Path</button>
         <button id="copyReviewerBriefBtn" class="action-btn" type="button">Copy Telemetry Brief</button>
         <button id="copyScenarioBriefBtn" class="action-btn" type="button">Copy Scenario Brief</button>
       </div>
-      <p id="quickActionStatus" class="hint">Default move: copy the review path. Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help</p>
+      <p id="quickActionStatus" class="hint">Default move: copy the scenario path. Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help</p>
     </section>
   </main>
 
@@ -217,7 +217,7 @@
       if (key === "?") {
         event.preventDefault();
         if (quickActionStatus) {
-          quickActionStatus.textContent = "Start with the review path. Then use the telemetry or scenario brief if the reviewer needs more context.";
+          quickActionStatus.textContent = "Start with the scenario path. Then use the telemetry or scenario brief if the reviewer needs more context.";
         }
         return;
       }
