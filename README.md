@@ -44,6 +44,7 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 ## Notes
 - Keep generated/runtime artifacts out of git (`.build/`, `.swiftpm/`, `DerivedData/`).
 - The in-app telemetry deck now reports ice integrity, water load, habitat risk, gravity strength, a recommended next action, and a simulation review pack.
+- The reviewer flow now includes a scenario history trend board so recent melt, flood, and recovery drift stay visible instead of only the current frame.
 - Simulator and non-motion devices fall back to stable gravity so the scene keeps behaving predictably.
 - The CLI fallback emits `ecotide-review-pack-v1` so reviewers can inspect posture even without the iOS rendering path.
 
