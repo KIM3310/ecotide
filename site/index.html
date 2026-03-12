@@ -39,7 +39,7 @@
         <span class="chip">simulation</span>
       </div>
       <h1>Motion-driven environmental simulation with reviewer-friendly telemetry.</h1>
-      <p class="lede">EcoTide is a simulation you understand by watching the scene respond, not by reading a fake browser clone. This page gives reviewers the contract, the scenario entry points, and the shortest route into the native proof.</p>
+      <p class="lede">EcoTide is meant to be felt as the scene reacts, not flattened into a fake browser clone. This page keeps the reviewer path honest: scenario entry points, telemetry posture, and the quickest route back to the native SwiftUI proof.</p>
     </section>
 
     <section class="grid two">
@@ -72,7 +72,7 @@
         </ul>
       </article>
       <article class="panel">
-        <h2>Review path</h2>
+        <h2>Try this first</h2>
         <ul class="list">
           <li>Open the repo README.</li>
           <li>Run the CLI fallback for the `ecotide-review-pack-v1` contract.</li>
@@ -84,14 +84,14 @@
 
 
     <section class="panel quick-actions">
-      <h2>Simulation handoff bar</h2>
-      <p class="hint">Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help</p>
+      <h2>Start here</h2>
+      <p class="hint">Copy the review path first, then hand over telemetry or scenario context only if the reviewer needs more detail.</p>
       <div class="action-row">
         <button id="copyReviewPathBtn" class="action-btn" type="button">Copy Review Path</button>
         <button id="copyReviewerBriefBtn" class="action-btn" type="button">Copy Telemetry Brief</button>
         <button id="copyScenarioBriefBtn" class="action-btn" type="button">Copy Scenario Brief</button>
       </div>
-      <p id="quickActionStatus" class="hint">Use this bar when you need a short handoff that keeps the focus on telemetry and scene behavior. Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help</p>
+      <p id="quickActionStatus" class="hint">Default move: copy the review path. Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help</p>
     </section>
   </main>
 
@@ -148,7 +148,7 @@
       if (key === "?") {
         event.preventDefault();
         if (quickActionStatus) {
-          quickActionStatus.textContent = "Shortcut keys: C review path · B telemetry brief · D scenario brief · ? help";
+          quickActionStatus.textContent = "Start with the review path. Then use the telemetry or scenario brief if the reviewer needs more context.";
         }
         return;
       }
