@@ -140,6 +140,7 @@ struct ContentView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
 
                     reviewPackCard
+                    trendBoardCard
                 }
                 .padding(.horizontal, 30)
                 .padding(.top, 18)
@@ -248,6 +249,10 @@ struct ContentView: View {
 
     private var reviewPack: SimulationReviewPack {
         envState.buildReviewPack(motionAvailable: motionManager.motionAvailable)
+    }
+
+    private var trendBoard: ScenarioTrendBoard {
+        envState.buildTrendBoard()
     }
 
     private func percentString(_ value: Double) -> String {
@@ -617,9 +622,66 @@ private struct ReviewList: View {
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.82))
                         .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var trendBoardCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Scenario History")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.68))
+                        .textCase(.uppercase)
+                    Text(trendBoard.driftHeadline)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(.white)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("Attention")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.68))
+                    Text("\(trendBoard.attentionCount)")
+                        .font(.title3.weight(.bold))
+                        .foregroundColor(.white)
+                }
+            }
+
+            VStack(spacing: 10) {
+                ForEach(trendBoard.entries.suffix(3)) { entry in
+                    HStack(alignment: .top, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(entry.phase)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(.white)
+                            Text(entry.habitatStatus)
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.72))
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(percentString(entry.floodRisk))
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.white)
+                            Text(percentString(entry.iceIntegrity))
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.72))
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 12)
+                    .background(Color.white.opacity(0.06))
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
             }
         }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
+}
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }

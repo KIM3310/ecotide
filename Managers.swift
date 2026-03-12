@@ -17,6 +17,25 @@ struct SimulationReviewPack {
     let watchouts: [String]
 }
 
+struct ScenarioHistoryEntry: Identifiable {
+    let id = UUID()
+    let timestamp: Date
+    let phase: String
+    let habitatStatus: String
+    let waterDropCount: Int
+    let iceIntegrity: Double
+    let floodRisk: Double
+    let recommendedAction: String
+}
+
+struct ScenarioTrendBoard {
+    let contract: String
+    let latestPhase: String
+    let attentionCount: Int
+    let driftHeadline: String
+    let entries: [ScenarioHistoryEntry]
+}
+
 final class MotionManager: ObservableObject {
     private let motionManager = CMMotionManager()
     @Published var pitch: Double = 0.0
@@ -53,6 +72,11 @@ final class EnvironmentState: ObservableObject {
     @Published private(set) var gravityMagnitude: Double = 9.8
     @Published private(set) var motionGuidance: String = "CoreMotion live tilt enabled."
     @Published private(set) var recommendedAction: String = "Hold a cold baseline and observe how the shelf stabilizes."
+    @Published private(set) var scenarioHistory: [ScenarioHistoryEntry] = []
+
+    init() {
+        appendHistorySnapshot(force: true)
+    }
 
     var severityLabel: String {
         if temperature < 2.0 { return "Stable" }
@@ -141,6 +165,8 @@ final class EnvironmentState: ObservableObject {
         } else {
             recommendedAction = "Hold a cold baseline and observe how the shelf stabilizes."
         }
+
+        appendHistorySnapshot()
     }
 
     func resetTelemetry() {
@@ -150,5 +176,52 @@ final class EnvironmentState: ObservableObject {
         gravityMagnitude = 9.8
         motionGuidance = "CoreMotion live tilt enabled."
         recommendedAction = "Hold a cold baseline and observe how the shelf stabilizes."
+        appendHistorySnapshot(force: true)
+    }
+
+    func buildTrendBoard() -> ScenarioTrendBoard {
+        let entries = scenarioHistory.suffix(5)
+        let attentionCount = entries.filter { $0.floodRisk >= 0.35 || $0.iceIntegrity <= 0.6 }.count
+        let latestPhase = entries.last?.phase ?? thermalPhase
+        let driftHeadline: String
+        if attentionCount >= 2 {
+            driftHeadline = "Scenario drift is stacking up. Compare the recent phases before trusting the current scene."
+        } else if attentionCount == 1 {
+            driftHeadline = "One recent run crossed the watch threshold. Compare it with the latest recovery state."
+        } else {
+            driftHeadline = "Recent runs stayed stable enough for reviewer comparison."
+        }
+        return ScenarioTrendBoard(
+            contract: "ecotide-trend-board-v1",
+            latestPhase: latestPhase,
+            attentionCount: attentionCount,
+            driftHeadline: driftHeadline,
+            entries: Array(entries)
+        )
+    }
+
+    private func appendHistorySnapshot(force: Bool = false) {
+        let snapshot = ScenarioHistoryEntry(
+            timestamp: Date(),
+            phase: thermalPhase,
+            habitatStatus: habitatStatus,
+            waterDropCount: waterDropCount,
+            iceIntegrity: iceIntegrity,
+            floodRisk: floodRisk,
+            recommendedAction: recommendedAction
+        )
+
+        if !force, let previous = scenarioHistory.last {
+            let significantShift =
+                previous.phase != snapshot.phase
+                || abs(previous.floodRisk - snapshot.floodRisk) >= 0.12
+                || abs(previous.iceIntegrity - snapshot.iceIntegrity) >= 0.12
+            guard significantShift else { return }
+        }
+
+        scenarioHistory.append(snapshot)
+        if scenarioHistory.count > 8 {
+            scenarioHistory.removeFirst(scenarioHistory.count - 8)
+        }
     }
 }
