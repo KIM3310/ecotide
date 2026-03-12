@@ -11,6 +11,12 @@ EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-drive
 - **Solution / cloud architect:** the repo makes clear what belongs to the native scene and what belongs to the review contract.
 - **Field / solutions engineer:** scenario presets make the review path easy to replay in a live walkthrough.
 
+
+## Portfolio context
+- **Portfolio family:** human-centered intelligent products
+- **This repo's role:** native simulation / telemetry product that broadens the portfolio beyond workflow tools.
+- **Related repos:** `SteadyTap`, `the-savior`
+
 ## Start here
 - Primary product surface: the iOS SwiftUI package at the repo root (`Package.swift`, `MyApp.swift`, `ContentView.swift`, `SimulationScene.swift`)
 - Review/deploy surface: `site/` contains the static Pages wrapper, not the main app runtime
