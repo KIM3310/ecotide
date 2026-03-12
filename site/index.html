@@ -25,7 +25,9 @@
     .hero,.grid{display:grid;gap:16px}.hero{margin-bottom:18px}.eyebrow,.chip{display:inline-flex;padding:8px 12px;border-radius:999px;font-size:.82rem;font-weight:700}.eyebrow{background:#102028;color:#fff}.chip{background:var(--soft);color:var(--accent)}
     h1,h2{font-family:"Space Grotesk",sans-serif;letter-spacing:-.04em;margin:0}.hero h1{font-size:clamp(2.4rem,4.8vw,4.4rem);line-height:.96}.lede{max-width:840px;margin:0;color:var(--muted);line-height:1.75}
     .two{grid-template-columns:repeat(2,minmax(0,1fr));margin-top:18px}.list{margin:0;padding-left:18px;color:var(--muted);line-height:1.8}.links a{color:var(--accent);text-decoration:none;font-weight:600}
+    .lens-panel{margin-top:18px}.lens-tabs{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px}.lens-tab{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--muted);cursor:pointer}.lens-tab.active{color:var(--ink);border-color:var(--accent);background:var(--soft)}.lens-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.lens-card{border:1px solid var(--line);border-radius:18px;background:#fff;padding:16px}.lens-card strong{display:block;margin-bottom:8px}
     @media (max-width:900px){.two{grid-template-columns:1fr}}
+    @media (max-width:900px){.lens-grid{grid-template-columns:1fr}}
   
     .quick-actions{margin-top:18px}.quick-actions .action-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}.quick-actions .action-btn{border:1px solid var(--line);background:#fff;padding:10px 14px;border-radius:999px;font:inherit;font-weight:600;color:var(--ink);cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,border-color .12s ease}.quick-actions .action-btn:hover{transform:translateY(-1px);border-color:var(--accent);box-shadow:0 10px 24px rgba(15,23,42,.08)}.quick-actions .hint{margin:10px 0 0;color:var(--muted);font-size:.92rem;line-height:1.6}
   </style>
@@ -81,6 +83,21 @@
       </article>
     </section>
 
+    <section class="panel lens-panel">
+      <div class="lens-tabs" role="tablist" aria-label="ecotide lens">
+        <button id="lensSimulationBtn" class="lens-tab active" type="button">Simulation</button>
+        <button id="lensScienceBtn" class="lens-tab" type="button">Science</button>
+        <button id="lensReliabilityBtn" class="lens-tab" type="button">Reliability</button>
+      </div>
+      <h2 id="lensHeadline">Simulation-first proof path</h2>
+      <p id="lensSummary" class="hint">Start with motion-driven scene response, then use telemetry and scenario presets to explain what changed.</p>
+      <div id="lensGrid" class="lens-grid">
+        <article class="lens-card"><strong>01 · Motion</strong><p>Show the scene reacting first so the product feels alive before any numbers appear.</p></article>
+        <article class="lens-card"><strong>02 · Telemetry</strong><p>Use ice integrity and habitat risk as supporting evidence, not the whole story.</p></article>
+        <article class="lens-card"><strong>03 · Scenario</strong><p>End with the scenario brief once the simulation behavior is easy to trust.</p></article>
+      </div>
+    </section>
+
 
 
     <section class="panel quick-actions">
@@ -125,6 +142,54 @@
     }
 
     const quickActionStatus = document.getElementById("quickActionStatus");
+    const lensHeadline = document.getElementById("lensHeadline");
+    const lensSummary = document.getElementById("lensSummary");
+    const lensGrid = document.getElementById("lensGrid");
+    const lensSimulationBtn = document.getElementById("lensSimulationBtn");
+    const lensScienceBtn = document.getElementById("lensScienceBtn");
+    const lensReliabilityBtn = document.getElementById("lensReliabilityBtn");
+    let currentLens = "simulation";
+    const lensConfig = {
+      simulation: {
+        headline: "Simulation-first proof path",
+        summary: "Start with motion-driven scene response, then use telemetry and scenario presets to explain what changed.",
+        cards: [
+          ["01 · Motion", "Show the scene reacting first so the product feels alive before any numbers appear."],
+          ["02 · Telemetry", "Use ice integrity and habitat risk as supporting evidence, not the whole story."],
+          ["03 · Scenario", "End with the scenario brief once the simulation behavior is easy to trust."],
+        ],
+      },
+      science: {
+        headline: "Science lens",
+        summary: "Use this when the reviewer cares about what the telemetry means, not just how smooth the simulation looks.",
+        cards: [
+          ["01 · System state", "Explain which telemetry fields matter before showing the scenario presets."],
+          ["02 · Fallback mode", "Keep the fallback path visible so the product still feels trustworthy without motion sensors."],
+          ["03 · Review pack", "Use the review path once the simulation logic reads like a deliberate model."],
+        ],
+      },
+      reliability: {
+        headline: "Reliability lens",
+        summary: "Use the CLI fallback and scenario brief to prove the product remains reviewable when the full motion path is unavailable.",
+        cards: [
+          ["01 · CLI fallback", "Show the scenario contract outside the simulator when needed."],
+          ["02 · Scenario brief", "Use the scenario brief to explain stable vs escalating vs critical behavior."],
+          ["03 · Native proof", "Return to the SwiftUI app once the reviewer understands the resilience story."],
+        ],
+      },
+    };
+
+    function renderLensPanel() {
+      const config = lensConfig[currentLens];
+      if (!config) return;
+      lensHeadline.textContent = config.headline;
+      lensSummary.textContent = config.summary;
+      lensGrid.innerHTML = config.cards.map(([title, body]) => `<article class="lens-card"><strong>${title}</strong><p>${body}</p></article>`).join("");
+      [lensSimulationBtn, lensScienceBtn, lensReliabilityBtn].forEach((btn) => btn?.classList.remove("active"));
+      if (currentLens === "simulation") lensSimulationBtn?.classList.add("active");
+      if (currentLens === "science") lensScienceBtn?.classList.add("active");
+      if (currentLens === "reliability") lensReliabilityBtn?.classList.add("active");
+    }
     const reviewPathPayload = 'EcoTide review path\n- Read the README for motion-driven simulation scope.\n- Run the CLI fallback for the ecotide-review-pack-v1 contract.\n- Use Xcode or simulator for the real rendering and motion path.';
     const reviewerBriefPayload = 'EcoTide reviewer brief\nHeadline: Motion-driven environmental simulation with reviewer-friendly telemetry.\nNative proof: SwiftUI simulation on device or simulator.\nFallback proof: swift run EcoTideCLI --scenario stable --motion live\nPublic surface: a lightweight reviewer landing page for the native simulation.';
     const scenarioBriefPayload = 'EcoTide scenario decision brief\nHeadline: Use scenario presets to explain what reviewers should do next, not just what they are seeing.\nFocus: stable vs escalating vs critical scenario changes, motion mode, and the recommended next action.\nNative proof: SwiftUI simulation on device or simulator.\nFallback proof: swift run EcoTideCLI --scenario critical --motion fallback';
@@ -139,6 +204,10 @@
     document.getElementById("copyReviewPathBtn")?.addEventListener("click", () => runQuickCopy(reviewPathPayload, "Review path copied.", "Failed to copy review path."));
     document.getElementById("copyReviewerBriefBtn")?.addEventListener("click", () => runQuickCopy(reviewerBriefPayload, "Telemetry brief copied.", "Failed to copy telemetry brief."));
     document.getElementById("copyScenarioBriefBtn")?.addEventListener("click", () => runQuickCopy(scenarioBriefPayload, "Scenario brief copied.", "Failed to copy scenario brief."));
+    lensSimulationBtn?.addEventListener("click", () => { currentLens = "simulation"; renderLensPanel(); });
+    lensScienceBtn?.addEventListener("click", () => { currentLens = "science"; renderLensPanel(); });
+    lensReliabilityBtn?.addEventListener("click", () => { currentLens = "reliability"; renderLensPanel(); });
+    renderLensPanel();
 
     window.addEventListener("keydown", (event) => {
       if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return;
