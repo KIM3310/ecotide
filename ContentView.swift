@@ -352,6 +352,18 @@ struct ContentView: View {
                     .font(.subheadline)
                     .foregroundColor(.white.opacity(0.84))
                     .fixedSize(horizontal: false, vertical: true)
+                HStack(spacing: 8) {
+                    ForEach(focus.signalPills, id: \.self) { pill in
+                        Text(pill)
+                            .font(.caption2.weight(.semibold))
+                            .foregroundColor(.white.opacity(0.88))
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 7)
+                            .background(Color.white.opacity(0.08))
+                            .clipShape(Capsule())
+                    }
+                }
+                .fixedSize(horizontal: false, vertical: true)
                 Text(focus.reviewerNote)
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.65))

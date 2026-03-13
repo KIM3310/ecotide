@@ -6,13 +6,15 @@ public struct ScenarioFocusCard: Equatable {
     public let headline: String
     public let reviewerNote: String
     public let actionLabel: String
+    public let signalPills: [String]
 
-    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, actionLabel: String) {
+    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, actionLabel: String, signalPills: [String]) {
         self.title = title
         self.temperatureLabel = temperatureLabel
         self.headline = headline
         self.reviewerNote = reviewerNote
         self.actionLabel = actionLabel
+        self.signalPills = signalPills
     }
 }
 
@@ -34,12 +36,31 @@ public struct ScenarioDefinition: Equatable {
     }
 
     public var focusCard: ScenarioFocusCard {
-        ScenarioFocusCard(
+        let severityLabel: String
+        let waterLoadGuidance: String
+        let reviewerCue: String
+
+        if temperature < 2.0 {
+            severityLabel = "Severity · Stable"
+            waterLoadGuidance = "Water load · Low drift"
+            reviewerCue = "Review cue · Start here"
+        } else if temperature < 4.0 {
+            severityLabel = "Severity · Escalating"
+            waterLoadGuidance = "Water load · Watch drift"
+            reviewerCue = "Review cue · Explain action window"
+        } else {
+            severityLabel = "Severity · Critical"
+            waterLoadGuidance = "Water load · Peak flood risk"
+            reviewerCue = "Review cue · Reset after proof"
+        }
+
+        return ScenarioFocusCard(
             title: title,
             temperatureLabel: String(format: "+%.1f°C", temperature),
             headline: headline,
             reviewerNote: reviewerNote,
-            actionLabel: "Load \(title)"
+            actionLabel: "Load \(title)",
+            signalPills: [severityLabel, waterLoadGuidance, reviewerCue]
         )
     }
 
