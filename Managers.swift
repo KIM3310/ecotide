@@ -2,6 +2,7 @@ import CoreGraphics
 import CoreMotion
 import Foundation
 import SwiftUI
+import EcoTideShared
 
 struct SimulationReviewPack {
     let contract: String
@@ -43,29 +44,25 @@ struct GuidedScenario: Identifiable {
     let headline: String
     let reviewerNote: String
 
-    static let quickStarts: [GuidedScenario] = [
+    var focusCard: ScenarioFocusCard {
+        ScenarioDefinition(
+            id: id,
+            title: title,
+            temperature: temperature,
+            headline: headline,
+            reviewerNote: reviewerNote
+        ).focusCard
+    }
+
+    static let quickStarts: [GuidedScenario] = ScenarioDefinition.quickStarts.map { scenario in
         GuidedScenario(
-            id: "cold-baseline",
-            title: "Cold Baseline",
-            temperature: 1.2,
-            headline: "Show the habitat before stress: stable shelf, low flood risk, calm gravity.",
-            reviewerNote: "Use this first when you want an emotionally calm opening for reviewers."
-        ),
-        GuidedScenario(
-            id: "coastline-watch",
-            title: "Coastline Watch",
-            temperature: 3.1,
-            headline: "Move into the watch band where the village still feels recoverable but pressure is visible.",
-            reviewerNote: "Best for explaining the moment where action still matters."
-        ),
-        GuidedScenario(
-            id: "critical-drill",
-            title: "Critical Drill",
-            temperature: 4.6,
-            headline: "Jump straight to the emotional failure case: rapid melt, high water load, and urgent next action.",
-            reviewerNote: "Use after baseline so the risk jump feels earned, not theatrical."
+            id: scenario.id,
+            title: scenario.title,
+            temperature: scenario.temperature,
+            headline: scenario.headline,
+            reviewerNote: scenario.reviewerNote
         )
-    ]
+    }
 }
 
 final class MotionManager: ObservableObject {

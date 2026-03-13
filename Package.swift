@@ -39,9 +39,15 @@ let package: Package = {
             )
         ],
         targets: [
+            .target(
+                name: "EcoTideShared",
+                path: "Shared"
+            ),
             .executableTarget(
                 name: "AppModule",
-                path: "."
+                dependencies: ["EcoTideShared"],
+                path: ".",
+                exclude: ["Shared", "spm-cli", "Tests"]
             )
         ]
     )
@@ -55,8 +61,13 @@ let package: Package = {
             )
         ],
         targets: [
+            .target(
+                name: "EcoTideShared",
+                path: "Shared"
+            ),
             .executableTarget(
                 name: "AppModule",
+                dependencies: ["EcoTideShared"],
                 path: "spm-cli"
             )
         ]

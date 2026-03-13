@@ -1,3 +1,4 @@
+import EcoTideShared
 import Foundation
 
 enum ReviewScenario: String {
@@ -53,6 +54,8 @@ let args = Array(CommandLine.arguments.dropFirst())
 let scenario = ReviewScenario(rawValue: (parseValue(flag: "--scenario", args: args) ?? "critical").lowercased()) ?? .critical
 let motion = MotionMode(rawValue: (parseValue(flag: "--motion", args: args) ?? "fallback").lowercased()) ?? .fallback
 
+let sharedQuickStarts = ScenarioDefinition.quickStarts.map(\.focusCard.actionLabel)
+
 let reviewRoutes = [
     "Review Pack card",
     "Telemetry deck",
@@ -76,6 +79,7 @@ let payload: [String: Any] = [
         "motion_mode": motion.label,
         "telemetry_surface_count": 5,
         "review_routes": reviewRoutes,
+        "quick_start_actions": sharedQuickStarts,
     ],
     "two_minute_review": [
         "Confirm that this CLI output is a fallback contract rather than the full rendering path.",

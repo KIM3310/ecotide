@@ -13,6 +13,7 @@ struct ContentView: View {
     // Store scene in State to prevent physics engine resets on UI updates
     @State private var scene = SimulationScene()
     @State private var reviewerActionStatus = "Reviewer shortcuts keep the simulation proof path ready for demo capture."
+    @State private var selectedScenarioID = GuidedScenario.quickStarts.first?.id ?? "cold-baseline"
 
     private let guidedScenarios = GuidedScenario.quickStarts
     
@@ -86,6 +87,7 @@ struct ContentView: View {
                 .padding(.top, 12)
 
                 VStack(spacing: 14) {
+                    scenarioFocusCard
                     scenarioDeckCard
 
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
@@ -280,6 +282,7 @@ struct ContentView: View {
             }
 
             ForEach(guidedScenarios) { scenario in
+                let isSelected = scenario.id == selectedScenarioID
                 Button {
                     applyGuidedScenario(scenario)
                 } label: {
@@ -303,17 +306,75 @@ struct ContentView: View {
                             Text(String(format: "+%.1f°C", scenario.temperature))
                                 .font(.system(.body, design: .monospaced).weight(.bold))
                                 .foregroundColor(.white)
-                            Text("Load case")
+                            Text(isSelected ? "Selected" : "Tap to load")
                                 .font(.caption.weight(.semibold))
-                                .foregroundColor(.cyan)
+                                .foregroundColor(isSelected ? .mint : .cyan)
                         }
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 14)
-                    .background(Color.white.opacity(0.06))
+                    .background(isSelected ? Color.white.opacity(0.12) : Color.white.opacity(0.06))
                     .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(isSelected ? Color.mint.opacity(0.55) : Color.white.opacity(0.06), lineWidth: 1)
+                    )
                 }
                 .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
+    }
+
+    private var selectedScenario: GuidedScenario {
+        guidedScenarios.first(where: { $0.id == selectedScenarioID }) ?? guidedScenarios[0]
+    }
+
+    private var scenarioFocusCard: some View {
+        let focus = selectedScenario.focusCard
+        return HStack(alignment: .top, spacing: 16) {
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Start Here")
+                    .font(.caption.weight(.semibold))
+                    .foregroundColor(.white.opacity(0.65))
+                    .textCase(.uppercase)
+                Text(focus.title)
+                    .font(.title3.weight(.bold))
+                    .foregroundColor(.white)
+                Text(focus.headline)
+                    .font(.subheadline)
+                    .foregroundColor(.white.opacity(0.84))
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(focus.reviewerNote)
+                    .font(.caption)
+                    .foregroundColor(.white.opacity(0.65))
+            }
+
+            Spacer()
+
+            VStack(alignment: .trailing, spacing: 10) {
+                Text(focus.temperatureLabel)
+                    .font(.system(.title3, design: .monospaced).weight(.bold))
+                    .foregroundColor(.white)
+                Button {
+                    applyGuidedScenario(selectedScenario)
+                } label: {
+                    Label(focus.actionLabel, systemImage: "play.fill")
+                        .font(.caption.weight(.semibold))
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 10)
+                        .background(Color.white.opacity(0.1))
+                        .clipShape(Capsule())
+                }
+                .buttonStyle(.plain)
+                .foregroundColor(.white)
             }
         }
         .padding(.horizontal, 18)
@@ -335,6 +396,7 @@ struct ContentView: View {
     }
 
     private func applyGuidedScenario(_ scenario: GuidedScenario) {
+        selectedScenarioID = scenario.id
         scene.resetScenario()
         envState.applyQuickStart(scenario)
         reviewerActionStatus = "Loaded \(scenario.title) · \(scenario.reviewerNote)"
@@ -752,8 +814,12 @@ private struct ReviewList: View {
                     }
                     .padding(.horizontal, 14)
                     .padding(.vertical, 12)
-                    .background(Color.white.opacity(0.06))
+                    .background(isSelected ? Color.white.opacity(0.12) : Color.white.opacity(0.06))
                     .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(isSelected ? Color.mint.opacity(0.55) : Color.white.opacity(0.06), lineWidth: 1)
+                    )
                 }
             }
         }
