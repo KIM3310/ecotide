@@ -5,15 +5,17 @@ public struct ScenarioFocusCard: Equatable {
     public let temperatureLabel: String
     public let headline: String
     public let reviewerNote: String
+    public let confidenceLine: String
     public let actionLabel: String
     public let signalPills: [String]
     public let proofLine: String
 
-    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, actionLabel: String, signalPills: [String], proofLine: String) {
+    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, confidenceLine: String, actionLabel: String, signalPills: [String], proofLine: String) {
         self.title = title
         self.temperatureLabel = temperatureLabel
         self.headline = headline
         self.reviewerNote = reviewerNote
+        self.confidenceLine = confidenceLine
         self.actionLabel = actionLabel
         self.signalPills = signalPills
         self.proofLine = proofLine
@@ -41,22 +43,26 @@ public struct ScenarioDefinition: Equatable {
         let severityLabel: String
         let waterLoadGuidance: String
         let reviewerCue: String
+        let confidenceLine: String
         let proofLine: String
 
         if temperature < 2.0 {
             severityLabel = "Severity · Stable"
             waterLoadGuidance = "Water load · Low drift"
             reviewerCue = "Review cue · Start here"
+            confidenceLine = "Confidence line · Begin here so the simulation feels calm before you ask reviewers to interpret pressure."
             proofLine = "Proof path · Open calm baseline first, then escalate only after reviewers see a stable shelf."
         } else if temperature < 4.0 {
             severityLabel = "Severity · Escalating"
             waterLoadGuidance = "Water load · Watch drift"
             reviewerCue = "Review cue · Explain action window"
+            confidenceLine = "Confidence line · Use this only after baseline so the scenario shift feels explainable rather than abrupt."
             proofLine = "Proof path · Use this watch band to explain how motion and thermal pressure combine before failure."
         } else {
             severityLabel = "Severity · Critical"
             waterLoadGuidance = "Water load · Peak flood risk"
             reviewerCue = "Review cue · Reset after proof"
+            confidenceLine = "Confidence line · Use this emotional peak after the calmer route, then reset immediately so the proof stays reviewer-safe."
             proofLine = "Proof path · Show the surge, read next action, then reset so the dramatic state stays reproducible."
         }
 
@@ -65,6 +71,7 @@ public struct ScenarioDefinition: Equatable {
             temperatureLabel: String(format: "+%.1f°C", temperature),
             headline: headline,
             reviewerNote: reviewerNote,
+            confidenceLine: confidenceLine,
             actionLabel: "Load \(title)",
             signalPills: [severityLabel, waterLoadGuidance, reviewerCue],
             proofLine: proofLine
