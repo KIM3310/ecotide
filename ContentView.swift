@@ -13,6 +13,8 @@ struct ContentView: View {
     // Store scene in State to prevent physics engine resets on UI updates
     @State private var scene = SimulationScene()
     @State private var reviewerActionStatus = "Reviewer shortcuts keep the simulation proof path ready for demo capture."
+
+    private let guidedScenarios = GuidedScenario.quickStarts
     
     var body: some View {
         ZStack {
@@ -84,6 +86,8 @@ struct ContentView: View {
                 .padding(.top, 12)
 
                 VStack(spacing: 14) {
+                    scenarioDeckCard
+
                     LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
                         SignalCard(
                             title: "Thermal Phase",
@@ -251,12 +255,89 @@ struct ContentView: View {
         envState.buildReviewPack(motionAvailable: motionManager.motionAvailable)
     }
 
+    private var scenarioDeckCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Guided Scenarios")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.65))
+                        .textCase(.uppercase)
+                    Text("Pick one honest climate moment before you start tilting.")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                Text(envState.severityLabel)
+                    .font(.caption.monospaced())
+                    .foregroundColor(.white.opacity(0.75))
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 6)
+                    .background(Color.white.opacity(0.08))
+                    .clipShape(Capsule())
+            }
+
+            ForEach(guidedScenarios) { scenario in
+                Button {
+                    applyGuidedScenario(scenario)
+                } label: {
+                    HStack(alignment: .top, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 5) {
+                            Text(scenario.title)
+                                .font(.headline.weight(.semibold))
+                                .foregroundColor(.white)
+                            Text(scenario.headline)
+                                .font(.subheadline)
+                                .foregroundColor(.white.opacity(0.82))
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text(scenario.reviewerNote)
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.62))
+                        }
+
+                        Spacer()
+
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text(String(format: "+%.1f°C", scenario.temperature))
+                                .font(.system(.body, design: .monospaced).weight(.bold))
+                                .foregroundColor(.white)
+                            Text("Load case")
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.cyan)
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 14)
+                    .background(Color.white.opacity(0.06))
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                }
+                .buttonStyle(.plain)
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 22, style: .continuous)
+                .stroke(Color.white.opacity(0.08), lineWidth: 1)
+        )
+    }
+
     private var trendBoard: ScenarioTrendBoard {
         envState.buildTrendBoard()
     }
 
     private func percentString(_ value: Double) -> String {
         String(format: "%.0f%%", max(0.0, min(1.0, value)) * 100.0)
+    }
+
+    private func applyGuidedScenario(_ scenario: GuidedScenario) {
+        scene.resetScenario()
+        envState.applyQuickStart(scenario)
+        reviewerActionStatus = "Loaded \(scenario.title) · \(scenario.reviewerNote)"
     }
 
     private var reviewPackCard: some View {

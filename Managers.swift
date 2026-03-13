@@ -36,6 +36,38 @@ struct ScenarioTrendBoard {
     let entries: [ScenarioHistoryEntry]
 }
 
+struct GuidedScenario: Identifiable {
+    let id: String
+    let title: String
+    let temperature: Double
+    let headline: String
+    let reviewerNote: String
+
+    static let quickStarts: [GuidedScenario] = [
+        GuidedScenario(
+            id: "cold-baseline",
+            title: "Cold Baseline",
+            temperature: 1.2,
+            headline: "Show the habitat before stress: stable shelf, low flood risk, calm gravity.",
+            reviewerNote: "Use this first when you want an emotionally calm opening for reviewers."
+        ),
+        GuidedScenario(
+            id: "coastline-watch",
+            title: "Coastline Watch",
+            temperature: 3.1,
+            headline: "Move into the watch band where the village still feels recoverable but pressure is visible.",
+            reviewerNote: "Best for explaining the moment where action still matters."
+        ),
+        GuidedScenario(
+            id: "critical-drill",
+            title: "Critical Drill",
+            temperature: 4.6,
+            headline: "Jump straight to the emotional failure case: rapid melt, high water load, and urgent next action.",
+            reviewerNote: "Use after baseline so the risk jump feels earned, not theatrical."
+        )
+    ]
+}
+
 final class MotionManager: ObservableObject {
     private let motionManager = CMMotionManager()
     @Published var pitch: Double = 0.0
@@ -177,6 +209,11 @@ final class EnvironmentState: ObservableObject {
         motionGuidance = "CoreMotion live tilt enabled."
         recommendedAction = "Hold a cold baseline and observe how the shelf stabilizes."
         appendHistorySnapshot(force: true)
+    }
+
+    func applyQuickStart(_ scenario: GuidedScenario) {
+        temperature = scenario.temperature
+        recommendedAction = scenario.headline
     }
 
     func buildTrendBoard() -> ScenarioTrendBoard {
