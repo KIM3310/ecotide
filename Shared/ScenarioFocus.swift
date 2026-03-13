@@ -7,14 +7,16 @@ public struct ScenarioFocusCard: Equatable {
     public let reviewerNote: String
     public let actionLabel: String
     public let signalPills: [String]
+    public let proofLine: String
 
-    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, actionLabel: String, signalPills: [String]) {
+    public init(title: String, temperatureLabel: String, headline: String, reviewerNote: String, actionLabel: String, signalPills: [String], proofLine: String) {
         self.title = title
         self.temperatureLabel = temperatureLabel
         self.headline = headline
         self.reviewerNote = reviewerNote
         self.actionLabel = actionLabel
         self.signalPills = signalPills
+        self.proofLine = proofLine
     }
 }
 
@@ -39,19 +41,23 @@ public struct ScenarioDefinition: Equatable {
         let severityLabel: String
         let waterLoadGuidance: String
         let reviewerCue: String
+        let proofLine: String
 
         if temperature < 2.0 {
             severityLabel = "Severity · Stable"
             waterLoadGuidance = "Water load · Low drift"
             reviewerCue = "Review cue · Start here"
+            proofLine = "Proof path · Open calm baseline first, then escalate only after reviewers see a stable shelf."
         } else if temperature < 4.0 {
             severityLabel = "Severity · Escalating"
             waterLoadGuidance = "Water load · Watch drift"
             reviewerCue = "Review cue · Explain action window"
+            proofLine = "Proof path · Use this watch band to explain how motion and thermal pressure combine before failure."
         } else {
             severityLabel = "Severity · Critical"
             waterLoadGuidance = "Water load · Peak flood risk"
             reviewerCue = "Review cue · Reset after proof"
+            proofLine = "Proof path · Show the surge, read next action, then reset so the dramatic state stays reproducible."
         }
 
         return ScenarioFocusCard(
@@ -60,7 +66,8 @@ public struct ScenarioDefinition: Equatable {
             headline: headline,
             reviewerNote: reviewerNote,
             actionLabel: "Load \(title)",
-            signalPills: [severityLabel, waterLoadGuidance, reviewerCue]
+            signalPills: [severityLabel, waterLoadGuidance, reviewerCue],
+            proofLine: proofLine
         )
     }
 

@@ -367,6 +367,10 @@ struct ContentView: View {
                 Text(focus.reviewerNote)
                     .font(.caption)
                     .foregroundColor(.white.opacity(0.65))
+                Text(focus.proofLine)
+                    .font(.caption2)
+                    .foregroundColor(.white.opacity(0.58))
+                    .fixedSize(horizontal: false, vertical: true)
             }
 
             Spacer()

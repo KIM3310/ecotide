@@ -14,6 +14,7 @@ struct ScenarioFocusRegression {
         precondition(ScenarioDefinition.criticalDrill.id == ScenarioDefinition.criticalDrillID)
         precondition(ScenarioDefinition.criticalDrill.focusCard.title == "Critical Drill")
         precondition(ScenarioDefinition.criticalDrill.focusCard.signalPills.last == "Review cue · Reset after proof")
+        precondition(ScenarioDefinition.criticalDrill.focusCard.proofLine.contains("reset"))
         print("EcoTide scenario focus regression OK")
     }
 }
