@@ -63,6 +63,14 @@ struct GuidedScenario: Identifiable {
             reviewerNote: scenario.reviewerNote
         )
     }
+
+    static func quickStart(id: String) -> GuidedScenario? {
+        quickStarts.first(where: { $0.id == id })
+    }
+
+    static var criticalDrill: GuidedScenario {
+        quickStart(id: ScenarioDefinition.criticalDrillID) ?? quickStarts.last!
+    }
 }
 
 final class MotionManager: ObservableObject {

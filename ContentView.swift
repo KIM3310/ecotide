@@ -709,9 +709,9 @@ struct ContentView: View {
     }
 
     private func focusCriticalScenario() {
-        scene.resetScenario()
-        envState.temperature = 4.6
-        reviewerActionStatus = "Jumped to the critical melt scenario for fast reviewer capture."
+        let criticalScenario = GuidedScenario.criticalDrill
+        applyGuidedScenario(criticalScenario)
+        reviewerActionStatus = "Jumped to the critical melt scenario and synced the focused reviewer card."
     }
 }
 

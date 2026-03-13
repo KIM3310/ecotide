@@ -17,6 +17,8 @@ public struct ScenarioFocusCard: Equatable {
 }
 
 public struct ScenarioDefinition: Equatable {
+    public static let criticalDrillID = "critical-drill"
+
     public let id: String
     public let title: String
     public let temperature: Double
@@ -64,4 +66,8 @@ public struct ScenarioDefinition: Equatable {
             reviewerNote: "Use after baseline so the risk jump feels earned, not theatrical."
         )
     ]
+
+    public static var criticalDrill: ScenarioDefinition {
+        quickStarts.first(where: { $0.id == criticalDrillID }) ?? quickStarts.last!
+    }
 }
