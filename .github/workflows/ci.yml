@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  swift-build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
+
+      - name: Swift build
+        run: swift build
+
+      - name: CLI review smoke
+        run: |
+          mkdir -p artifacts
+          swift run EcoTideCLI --scenario stable --motion live > artifacts/ecotide-cli-stable.json
+          swift run EcoTideCLI --scenario critical --motion fallback > artifacts/ecotide-cli-critical.json
+
+      - name: Upload CLI review artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecotide-cli-review-pack
+          path: artifacts/*.json

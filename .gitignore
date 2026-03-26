@@ -1,0 +1,15 @@
+# Codex runtime artifacts
+.codex_runs/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Xcode / macOS
+DerivedData/
+*.xcworkspace
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.swp
+.DS_Store
