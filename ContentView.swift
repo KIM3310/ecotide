@@ -733,6 +733,67 @@ struct ContentView: View {
         applyGuidedScenario(criticalScenario)
         reviewerActionStatus = "Jumped to the critical melt scenario and synced the focused reviewer card."
     }
+
+    private var trendBoardCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text("Scenario History")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.68))
+                        .textCase(.uppercase)
+                    Text(trendBoard.driftHeadline)
+                        .font(.subheadline.weight(.medium))
+                        .foregroundColor(.white)
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 4) {
+                    Text("Attention")
+                        .font(.caption.weight(.semibold))
+                        .foregroundColor(.white.opacity(0.68))
+                    Text("\(trendBoard.attentionCount)")
+                        .font(.title3.weight(.bold))
+                        .foregroundColor(.white)
+                }
+            }
+
+            VStack(spacing: 10) {
+                ForEach(trendBoard.entries.suffix(3)) { entry in
+                    HStack(alignment: .top, spacing: 12) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(entry.phase)
+                                .font(.subheadline.weight(.semibold))
+                                .foregroundColor(.white)
+                            Text(entry.habitatStatus)
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.72))
+                        }
+                        Spacer()
+                        VStack(alignment: .trailing, spacing: 2) {
+                            Text(percentString(entry.floodRisk))
+                                .font(.caption.weight(.semibold))
+                                .foregroundColor(.white)
+                            Text(percentString(entry.iceIntegrity))
+                                .font(.caption)
+                                .foregroundColor(.white.opacity(0.72))
+                        }
+                    }
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 12)
+                    .background(Color.white.opacity(0.06))
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                    )
+                }
+            }
+        }
+        .padding(.horizontal, 18)
+        .padding(.vertical, 16)
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+    }
 }
 
 private struct SignalCard: View {
@@ -785,70 +846,9 @@ private struct ReviewList: View {
                         .font(.caption)
                         .foregroundColor(.white.opacity(0.82))
                         .fixedSize(horizontal: false, vertical: true)
-        }
-    }
-
-    private var trendBoardCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Scenario History")
-                        .font(.caption.weight(.semibold))
-                        .foregroundColor(.white.opacity(0.68))
-                        .textCase(.uppercase)
-                    Text(trendBoard.driftHeadline)
-                        .font(.subheadline.weight(.medium))
-                        .foregroundColor(.white)
-                }
-                Spacer()
-                VStack(alignment: .trailing, spacing: 4) {
-                    Text("Attention")
-                        .font(.caption.weight(.semibold))
-                        .foregroundColor(.white.opacity(0.68))
-                    Text("\(trendBoard.attentionCount)")
-                        .font(.title3.weight(.bold))
-                        .foregroundColor(.white)
-                }
-            }
-
-            VStack(spacing: 10) {
-                ForEach(trendBoard.entries.suffix(3)) { entry in
-                    HStack(alignment: .top, spacing: 12) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(entry.phase)
-                                .font(.subheadline.weight(.semibold))
-                                .foregroundColor(.white)
-                            Text(entry.habitatStatus)
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.72))
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text(percentString(entry.floodRisk))
-                                .font(.caption.weight(.semibold))
-                                .foregroundColor(.white)
-                            Text(percentString(entry.iceIntegrity))
-                                .font(.caption)
-                                .foregroundColor(.white.opacity(0.72))
-                        }
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 12)
-                    .background(isSelected ? Color.white.opacity(0.12) : Color.white.opacity(0.06))
-                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 18, style: .continuous)
-                            .stroke(isSelected ? Color.mint.opacity(0.55) : Color.white.opacity(0.06), lineWidth: 1)
-                    )
                 }
             }
         }
-        .padding(.horizontal, 18)
-        .padding(.vertical, 16)
-        .background(.ultraThinMaterial)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-    }
-}
         .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
