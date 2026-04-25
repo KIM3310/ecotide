@@ -19,6 +19,9 @@ jobs:
       - name: Swift build
         run: swift build
 
+      - name: Swift tests
+        run: swift test
+
       - name: CLI review smoke
         run: |
           mkdir -p artifacts
