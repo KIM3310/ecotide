@@ -21,6 +21,10 @@ A SwiftUI simulation app that shows native craft through telemetry, simulation l
 - **Verification:** Run `bash scripts/smoke_cli_review_pack.sh` and `swift run EcoTideCLI`.
 - **Commercial read:** Position it as a native simulation case study for education, workshops, or mobile product craft.
 
+## Commercialization Playbook
+
+- [Monetization and GTM playbook](docs/monetization-playbook.md) maps the repository to buyer segments, offer ladder, pricing hypotheses, proof gates, and risk boundaries.
+
 ## One concrete review story
 A reviewer can start in a stable scenario, tilt the device until flood risk rises, then hit reset and watch the telemetry settle again. If motion is unavailable, the CLI review pack becomes the clean handoff instead of a confusing dead end.
 
