@@ -2,6 +2,18 @@
 
 EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-driven gravity interaction, a live telemetry overlay, and a reviewer-facing simulation review pack.
 
+## Product and Review Surface
+
+A SwiftUI simulation app that shows native craft through telemetry, simulation loops, and polished mobile interactions.
+
+| Lens | Definition |
+|---|---|
+| Buyer or user | Mobile product reviewers, simulation-tool teams, education creators, and SwiftUI-focused engineering teams. |
+| Commercial route | Use as a paid simulation app prototype, school/workshop demo, or native UX case study. |
+| Review signal | SwiftUI surface, motion telemetry, CLI handoff fallback, product-style simulation, and native app structure. |
+| Safety boundary | Motion and telemetry should stay privacy-aware and opt-in for production distribution. |
+| Fast proof | Build the app or run CLI fallback checks, then inspect simulation outputs and telemetry handling. |
+
 ## One concrete review story
 A reviewer can start in a stable scenario, tilt the device until flood risk rises, then hit reset and watch the telemetry settle again. If motion is unavailable, the CLI review pack becomes the clean handoff instead of a confusing dead end.
 
