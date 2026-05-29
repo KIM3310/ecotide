@@ -29,6 +29,7 @@ A SwiftUI simulation app that shows native craft through telemetry, simulation l
 
 - [Review guide](docs/reviewer-evidence-map.md) summarizes the project angle, first files to inspect, verification commands, and known boundaries.
 - [Quality notes](docs/quality-gate.md) lists the local checks, CI surface, and release expectations for this repository.
+- [Revenue growth model](docs/revenue-growth-model.md) maps the project to an ethical revenue path, activation loop, pricing logic, and growth experiments.
 
 ## One concrete review story
 A reviewer can start in a stable scenario, tilt the device until flood risk rises, then hit reset and watch the telemetry settle again. If motion is unavailable, the CLI review pack becomes the clean handoff instead of a confusing dead end.
