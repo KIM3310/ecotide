@@ -1,5 +1,10 @@
 # EcoTide
 
+> **Curated supporting repo**
+> This repository is kept as optional proof, but it no longer leads the portfolio.
+> Current front door: **twincity-ui and fab-ops-yield-control-tower**.
+> Reason: Mobile simulation work is interesting but less commercially sharp than enterprise operations, security, and data systems.
+
 EcoTide is an iOS SwiftUI simulation app (Swift Package based) with motion-driven gravity interaction, a live telemetry overlay, and a reviewer-facing simulation review pack.
 
 ## Product and Review Surface
@@ -31,6 +36,7 @@ A SwiftUI simulation app that shows native craft through telemetry, simulation l
 - [Quality notes](docs/quality-gate.md) lists the local checks, CI surface, and release expectations for this repository.
 - [Revenue growth model](docs/revenue-growth-model.md) maps the project to an ethical revenue path, activation loop, pricing logic, and growth experiments.
 - [Enterprise readiness notes](docs/enterprise-readiness.md) outlines security, data, operations, integration, and handoff expectations.
+- [Portfolio fit](docs/portfolio-fit.md) explains why this repository is archived/supporting and where the current portfolio front door lives.
 
 ## One concrete review story
 A reviewer can start in a stable scenario, tilt the device until flood risk rises, then hit reset and watch the telemetry settle again. If motion is unavailable, the CLI review pack becomes the clean handoff instead of a confusing dead end.
